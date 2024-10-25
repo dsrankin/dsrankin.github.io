@@ -13,6 +13,9 @@
         nav ul li { display: inline; margin-right: 20px; }
         section { display: none; }
         section.active { display: block; }
+        .member-list { display: flex; flex-wrap: wrap; gap: 20px; }
+        .member { display: flex; flex-direction: column; align-items: center; width: 150px; text-align: center; }
+        .member img { border-radius: 50%; width: 100px; height: 100px; object-fit: cover; }
         .news { background-color: #f2f2f2; padding: 10px; margin: 20px 0; }
     </style>
     <script>
@@ -54,12 +57,24 @@
         <!-- Group Members Tab -->
         <section id="members">
             <h2>Group Members</h2>
-            <ul>
-                <li>Dr. [Member 1 Name] – Postdoctoral Researcher</li>
-                <li>Ms. [Member 2 Name] – Ph.D. Candidate</li>
-                <li>Mr. [Member 3 Name] – Research Assistant</li>
+            <div class="member-list">
+                <div class="member">
+                    <img src="images/member1.jpg" alt="Dr. [Member 1 Name]">
+                    <p>Dr. [Member 1 Name]</p>
+                    <p>Postdoctoral Researcher</p>
+                </div>
+                <div class="member">
+                    <img src="images/member2.jpg" alt="Ms. [Member 2 Name]">
+                    <p>Ms. [Member 2 Name]</p>
+                    <p>Ph.D. Candidate</p>
+                </div>
+                <div class="member">
+                    <img src="images/member3.jpg" alt="Mr. [Member 3 Name]">
+                    <p>Mr. [Member 3 Name]</p>
+                    <p>Research Assistant</p>
+                </div>
                 <!-- Add or remove members as needed -->
-            </ul>
+            </div>
         </section>
 
         <!-- Publications Tab -->
