@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Energy Physics Research Group - University of Pennsylvania</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        header, footer { background-color: #0a4e84; color: white; text-align: center; padding: 10px 0; }
+        .container { width: 80%; margin: 0 auto; }
+        nav { margin-top: 20px; }
+        nav ul { list-style: none; padding: 0; }
+        nav ul li { display: inline; margin-right: 20px; }
+        section { display: none; }
+        section.active { display: block; }
+        .news { background-color: #f2f2f2; padding: 10px; margin: 20px 0; }
+    </style>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll("section").forEach(tab => tab.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>High Energy Physics Research Group</h1>
+        <h2>University of Pennsylvania</h2>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showTab('home')">Home</a></li>
+            <li><a href="#" onclick="showTab('bio')">About Prof. [Your Name]</a></li>
+            <li><a href="#" onclick="showTab('members')">Group Members</a></li>
+            <li><a href="#" onclick="showTab('papers')">Publications</a></li>
+            <li><a href="#" onclick="showTab('news')">News & Updates</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Home Tab -->
+        <section id="home" class="active">
+            <h2>Welcome to the High Energy Physics Group</h2>
+            <p>Our research group at the University of Pennsylvania focuses on exploring fundamental questions in particle physics. We work at the Large Hadron Collider to search for new physics beyond the Standard Model, with a special focus on trigger systems and applications of AI and ML. Our team is passionate about advancing our understanding of the universe at the highest energies.</p>
+        </section>
+
+        <!-- Biography Tab -->
+        <section id="bio">
+            <h2>About Prof. [Your Name]</h2>
+            <p>Professor [Your Name] is a physicist specializing in high-energy particle physics. With a Ph.D. from [University], Prof. [Your Name] has made significant contributions to experiments at the LHC, focusing on the search for new physics, development of innovative trigger systems, and integration of AI/ML techniques to enhance data analysis. Prof. [Your Name] is dedicated to advancing the field through both research and mentorship.</p>
+        </section>
+
+        <!-- Group Members Tab -->
+        <section id="members">
+            <h2>Group Members</h2>
+            <ul>
+                <li>Dr. [Member 1 Name] – Postdoctoral Researcher</li>
+                <li>Ms. [Member 2 Name] – Ph.D. Candidate</li>
+                <li>Mr. [Member 3 Name] – Research Assistant</li>
+                <!-- Add or remove members as needed -->
+            </ul>
+        </section>
+
+        <!-- Publications Tab -->
+        <section id="papers">
+            <h2>Publications</h2>
+            <ul>
+                <li><a href="https://doi.org/[DOI Link 1]" target="_blank">Paper Title 1 - Journal, Year</a></li>
+                <li><a href="https://doi.org/[DOI Link 2]" target="_blank">Paper Title 2 - Journal, Year</a></li>
+                <!-- Add or remove papers as needed -->
+            </ul>
+        </section>
+
+        <!-- News & Updates Tab -->
+        <section id="news">
+            <h2>News & Updates</h2>
+            <div class="news">
+                <p><strong>[Date]</strong> - Group member [Name] has successfully defended their Ph.D. thesis on [Topic]!</p>
+            </div>
+            <div class="news">
+                <p><strong>[Date]</strong> - Our latest paper on [Research Topic] has been published in [Journal].</p>
+            </div>
+            <!-- Add or remove news items as needed -->
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; [Current Year] High Energy Physics Research Group, University of Pennsylvania</p>
+    </footer>
+</body>
+</html>
