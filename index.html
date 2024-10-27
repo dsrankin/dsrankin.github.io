@@ -8,23 +8,39 @@
     <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background: url('images/background-image.jpg') no-repeat center center fixed; background-size: cover; background-attachment: fixed; opacity: 0.2; }
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #f0f0f0; /* Light gray background color */
+        }
+        footer {
+            padding-left: 20px; /* Indent the footer content */
+            background-color: #f2f2f2; /* Optional: background color for visibility */
+            text-align: center; /* Center-align text if desired */
+        }
         header {
             position: relative;
             color: white;
             text-align: center;
             padding: 20px 0;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('images/header-background.jpg') no-repeat center center / cover;
+            background-color: #011F5B;
         }
         .container { width: 80%; margin: 0 auto; padding-top: 20px; }
         nav { margin-top: 20px; }
         nav ul { list-style: none; padding: 0; }
-        nav ul li { display: inline; margin-right: 20px; }
+        nav ul li { display: inline; margin-left: 20px; }
         section { display: none; }
         section.active { display: block; }
-        .member-list { display: flex; flex-wrap: wrap; gap: 20px; }
+        .member-list { display: flex; flex-wrap: wrap; gap: 20px; flex-direction: column;}
         .member { display: flex; flex-direction: column; align-items: center; width: 150px; text-align: center; }
+        .member p {margin: 0;}
+        .member p:first-of-type {font-weight: bold; /* Make the name bold */}
+        .member p:last-of-type {
+            margin-top: 4px; /* Small space between name and title */
+            font-size: 0.9em; /* Optional: slightly smaller font for title */
+        }
         .member img { border-radius: 50%; width: 100px; height: 100px; object-fit: cover; }
         .news { background-color: #f2f2f2; padding: 10px; margin: 20px 0; }
     </style>
@@ -56,9 +72,8 @@
         <section id="home" class="active">
             <h2>Welcome to the Rankin Lab</h2>
             <p>My primary research uses data from proton-proton collisions at the CERN Large Hadron Collider (LHC) to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics as well as precision measurements of known particles, particularly in the highly boosted regime. As part of this research I make use of machine learning (ML) for an array of tasks, including jet classification, mass regression, and event reconstruction. I see ML as an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. My recent interests in ML are focused on anomaly detection and self-supervised learning (particularly through contrastive learning).</p>
-            <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration [https://fastmachinelearning.org/], which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
+            <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
             <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
-          </p>
         </section>
 
         <!-- Group Members Tab -->
@@ -129,9 +144,9 @@
         <!-- Publications Tab -->
         <section id="papers">
             <p>See also: 
-                 <li><a href="https://inspirehep.net/authors/1246648" target="_blank"><i class="fas fa-book"></i> INSPIRE</a></li>, 
-                <li><a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a></li>, 
-                <li><a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a></li>
+                <a href="https://inspirehep.net/authors/1246648" target="_blank"><i class="fas fa-book"></i> INSPIRE</a></li>, 
+                <a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a></li>, 
+                <a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a></li>
             </p>
             <h2>Publications</h2>
             <ul>
