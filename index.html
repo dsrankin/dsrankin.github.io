@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>High Energy Physics Research Group - University of Pennsylvania</title>
+    <title>Rankin Lab - UPenn</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        header, footer { background-color: #0a4e84; color: white; text-align: center; padding: 10px 0; }
-        .container { width: 80%; margin: 0 auto; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background: url('images/background-image.jpg') no-repeat center center fixed; background-size: cover; background-attachment: fixed; opacity: 0.2; }
+        header {
+            position: relative;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('images/header-background.jpg') no-repeat center center / cover;
+        }
+        .container { width: 80%; margin: 0 auto; padding-top: 20px; }
         nav { margin-top: 20px; }
         nav ul { list-style: none; padding: 0; }
         nav ul li { display: inline; margin-right: 20px; }
@@ -24,34 +31,31 @@
             document.getElementById(tabId).classList.add("active");
         }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>High Energy Physics Research Group</h1>
-        <h2>University of Pennsylvania</h2>
+        <h1>Rankin Lab</h1>
+        <h2>University of Pennsylvania, Department of Physics and Astronomy</h2>
     </header>
 
     <nav>
         <ul>
             <li><a href="#" onclick="showTab('home')">Home</a></li>
-            <li><a href="#" onclick="showTab('bio')">About Prof. [Your Name]</a></li>
             <li><a href="#" onclick="showTab('members')">Group Members</a></li>
-            <li><a href="#" onclick="showTab('papers')">Publications</a></li>
-            <li><a href="#" onclick="showTab('news')">News & Updates</a></li>
+            <li><a href="#" onclick="showTab('papers')">Research</a></li>
+            <!-- <li><a href="#" onclick="showTab('news')">News & Updates</a></li> -->
         </ul>
     </nav>
 
     <div class="container">
         <!-- Home Tab -->
         <section id="home" class="active">
-            <h2>Welcome to the High Energy Physics Group</h2>
-            <p>Our research group at the University of Pennsylvania focuses on exploring fundamental questions in particle physics. We work at the Large Hadron Collider to search for new physics beyond the Standard Model, with a special focus on trigger systems and applications of AI and ML. Our team is passionate about advancing our understanding of the universe at the highest energies.</p>
-        </section>
-
-        <!-- Biography Tab -->
-        <section id="bio">
-            <h2>About Prof. [Your Name]</h2>
-            <p>Professor [Your Name] is a physicist specializing in high-energy particle physics. With a Ph.D. from [University], Prof. [Your Name] has made significant contributions to experiments at the LHC, focusing on the search for new physics, development of innovative trigger systems, and integration of AI/ML techniques to enhance data analysis. Prof. [Your Name] is dedicated to advancing the field through both research and mentorship.</p>
+            <h2>Welcome to the Rankin Lab</h2>
+            <p>My primary research uses data from proton-proton collisions at the CERN Large Hadron Collider (LHC) to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics as well as precision measurements of known particles, particularly in the highly boosted regime. As part of this research I make use of machine learning (ML) for an array of tasks, including jet classification, mass regression, and event reconstruction. I see ML as an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. My recent interests in ML are focused on anomaly detection and self-supervised learning (particularly through contrastive learning).</p>
+            <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration [https://fastmachinelearning.org/], which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
+            <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
+          </p>
         </section>
 
         <!-- Group Members Tab -->
@@ -59,35 +63,88 @@
             <h2>Group Members</h2>
             <div class="member-list">
                 <div class="member">
-                    <img src="images/member1.jpg" alt="Dr. [Member 1 Name]">
-                    <p>Dr. [Member 1 Name]</p>
+                    <!-- <img src="images/hofung.jpg" alt="Ho Fung Tsoi"> -->
+                    <p>Dylan Rankin</p>
+                    <p>Assistant Professor</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/hofung.jpg" alt="Ho Fung Tsoi"> -->
+                    <p>Ho Fung Tsoi</p>
                     <p>Postdoctoral Researcher</p>
                 </div>
                 <div class="member">
-                    <img src="images/member2.jpg" alt="Ms. [Member 2 Name]">
-                    <p>Ms. [Member 2 Name]</p>
+                    <!-- <img src="images/kaito.jpg" alt="Kaito Sugizaki"> -->
+                    <p>Kaito Sugizaki</p>
+                    <p>Postdoctoral Researcher</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/gwen.jpg" alt="Gwen Gardner"> -->
+                    <p>Gwen Gardner</p>
                     <p>Ph.D. Candidate</p>
                 </div>
                 <div class="member">
-                    <img src="images/member3.jpg" alt="Mr. [Member 3 Name]">
-                    <p>Mr. [Member 3 Name]</p>
-                    <p>Research Assistant</p>
+                    <!-- <img src="images/maxcohen.jpg" alt="Max Cohen"> -->
+                    <p>Max Cohen</p>
+                    <p>Ph.D. Candidate</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/sterre.jpg" alt="Sterre Hoogendoorn"> -->
+                    <p>Sterre Hoogendoorn</p>
+                    <p>Ph.D. Candidate</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/chrisma.jpg" alt="Chris Ma"> -->
+                    <p>Chris Ma</p>
+                    <p>Ph.D. Candidate</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/ioannis.jpg" alt="Ioannis Kalaitzidis"> -->
+                    <p>Ioannis Kalaitzidis</p>
+                    <p>Undergraduate Student</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/vivek.jpg" alt="Vivek Krishnan"> -->
+                    <p>Vivek Krishnan</p>
+                    <p>Undergraduate Student</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/alexyang.jpg" alt="Alex Yang"> -->
+                    <p>Alex Yang</p>
+                    <p>Undergraduate Student</p>
+                </div>
+                <div class="member">
+                    <!-- <img src="images/louis.jpg" alt="Louis"> -->
+                    <p>Louis</p>
+                    <p>Lab Security</p>
                 </div>
                 <!-- Add or remove members as needed -->
             </div>
+            <!-- <h2>Past Group Members</h2> 
+            </div> -->
         </section>
 
         <!-- Publications Tab -->
         <section id="papers">
+            <p>See also: 
+                 <li><a href="https://inspirehep.net/authors/1246648" target="_blank"><i class="fas fa-book"></i> INSPIRE</a></li>, 
+                <li><a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a></li>, 
+                <li><a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a></li>
+            </p>
             <h2>Publications</h2>
             <ul>
-                <li><a href="https://doi.org/[DOI Link 1]" target="_blank">Paper Title 1 - Journal, Year</a></li>
-                <li><a href="https://doi.org/[DOI Link 2]" target="_blank">Paper Title 2 - Journal, Year</a></li>
+                <li><a href="https://doi.org/10.48550/arXiv.2410.13947" target="_blank">"MACK: Mismodeling Addressed with Contrastive Knowledge." arXiv preprint 2410.13947, (2024)</a></li>
+                <li><a href="https://doi.org/10.1088/2632-2153/acc0d7" target="_blank">"Ultra-low latency recurrent neural network inference on FPGAs for physics applications with hls4ml. Machine Learning: Science and Technology 4.2, (2023)"</a></li>
+                <li><a href="https://doi.org/10.1038/s41550-022-01651-w" target="_blank">"Hardware-accelerated inference for real-time gravitational-wave astronomy." Nat Astron, (2022)</a></li>
+                <li><a href="https://doi.org/10.1007/JHEP06(2021)030" target="_blank">"Quasi anomalous knowledge: searching for new physics with embedded knowledge." Journal of High Energy Physics 2021.6, (2021)</a></li>
+                <li><a href="https://doi.org/10.1088/2632-2153/abec21" target="_blank">"GPU coprocessors as a service for deep learning inference in high energy physics." Machine Learning: Science and Technology 2.3, (2021)</a></li>
+                <li><a href="https://doi.org/10.1109/H2RC51942.2020.00010" target="_blank">"FPGAs-as-a-service toolkit (FaaST)." 2020 IEEE/ACM International Workshop on Heterogeneous High-performance Reconfigurable Computing (H2RC), (2020)</a></li>
+                <li><a href="https://doi.org/10.1007/JHEP12(2020)085" target="_blank">"Inclusive search for highly boosted Higgs bosons decaying to bottom quark-antiquark pairs in proton-proton collisions at sqrt(s) = 13 TeV." J. High Energy Phys. 12, 85, (2020)</a></li>
                 <!-- Add or remove papers as needed -->
             </ul>
+            <p><a href="documents/CV.pdf" target="_blank">Download Prof. Rankin's CV (PDF)</a></p>
         </section>
 
-        <!-- News & Updates Tab -->
+        <!-- News & Updates Tab 
         <section id="news">
             <h2>News & Updates</h2>
             <div class="news">
@@ -95,13 +152,12 @@
             </div>
             <div class="news">
                 <p><strong>[Date]</strong> - Our latest paper on [Research Topic] has been published in [Journal].</p>
-            </div>
-            <!-- Add or remove news items as needed -->
-        </section>
+            </div> 
+        </section> -->
     </div>
 
     <footer>
-        <p>&copy; [Current Year] High Energy Physics Research Group, University of Pennsylvania</p>
+        <p>&copy; 2024 Rankin Lab, University of Pennsylvania</p>
     </footer>
 </body>
 </html>
