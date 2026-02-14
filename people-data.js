@@ -12,12 +12,12 @@ window.LAB_PHOTOS = {
 };
 
 window.GROUP_MEMBERS = [
-  { name: 'Dylan Rankin', role: 'Assistant Professor', photo: 'images/people/member-placeholder.svg' },
+  { name: 'Dylan Rankin', role: 'Assistant Professor', photo: 'images/people/dylan-rankin.png' },
   { name: 'Ho Fung Tsoi', role: 'Postdoctoral Researcher', photo: 'images/people/member-placeholder.svg' },
   { name: 'Kaito Sugizaki', role: 'Postdoctoral Researcher', photo: 'images/people/member-placeholder.svg' },
   { name: 'Gwen Gardner', role: 'Ph.D. Candidate', photo: 'images/people/member-placeholder.svg' },
   { name: 'Max Cohen', role: 'Ph.D. Candidate', photo: 'images/people/member-placeholder.svg' },
   { name: 'Sterre Hoogendoorn', role: 'Ph.D. Candidate', photo: 'images/people/member-placeholder.svg' },
   { name: 'Chris Ma', role: 'Ph.D. Candidate', photo: 'images/people/member-placeholder.svg' },
-  { name: 'Louis', role: 'Lab Security', photo: 'images/people/member-placeholder.svg' }
+  { name: 'Louis', role: 'Lab Security', photo: 'images/people/louis.jpg' }
 ];
