@@ -5,5 +5,6 @@ window.NEWS_ITEMS = [
     date: '2026-01-21',
     title: 'jBOT preprint posted on arXiv',
     details: '',
+    link: 'https://arxiv.org/abs/2601.11719'
   },
 ];
