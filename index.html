@@ -13,37 +13,84 @@
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            color: #12213d;
+            background: radial-gradient(circle at top, #f5f8ff 0%, #eef2fa 50%, #e7edf8 100%);
         }
         footer {
-            padding-left: 20px;
-            background-color: #f2f2f2;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.85);
             text-align: center;
+            border-top: 1px solid #d6ddee;
         }
         header {
             position: relative;
             color: white;
             text-align: center;
-            padding: 20px 0;
-            background-color: #011F5B;
+            padding: 40px 0 30px;
+            background: linear-gradient(140deg, #011f5b, #04358f 58%, #2663d7 100%);
+            box-shadow: 0 8px 20px rgba(1, 31, 91, 0.35);
         }
-        .container { width: 80%; margin: 0 auto; padding-top: 20px; }
-        nav { margin-top: 20px; }
+        .container {
+            width: min(900px, 90%);
+            margin: 24px auto 0;
+            padding: 28px;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 16px;
+            box-shadow: 0 14px 34px rgba(26, 46, 96, 0.14);
+            backdrop-filter: blur(2px);
+        }
+        nav {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
         nav ul { list-style: none; padding: 0; }
-        nav ul li { display: inline; margin-left: 20px; }
+        nav ul li { display: inline; margin: 0 6px; }
+        nav a {
+            display: inline-block;
+            text-decoration: none;
+            color: #f3f6ff;
+            background: rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            padding: 8px 16px;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        nav a:hover, nav a:focus-visible {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        nav a.active-tab {
+            background: #ffffff;
+            color: #002f85;
+            font-weight: 700;
+        }
         section { display: none; }
         section.active { display: block; }
         .member-list { display: flex; flex-wrap: wrap; gap: 20px; flex-direction: column; }
-        .member { display: flex; flex-direction: column; align-items: center; width: 150px; text-align: center; }
+        .member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 180px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 14px 10px;
+            box-shadow: 0 8px 16px rgba(11, 39, 87, 0.1);
+            border: 1px solid #e9eef9;
+        }
         .member p { margin: 0; }
         .member p:first-of-type { font-weight: bold; }
         .member p:last-of-type { margin-top: 4px; font-size: 0.9em; }
         .member img { border-radius: 50%; width: 100px; height: 100px; object-fit: cover; }
         .news-card, .paper-card {
-            background-color: #f2f2f2;
-            border-radius: 8px;
+            background-color: #ffffff;
+            border-radius: 12px;
             padding: 12px 14px;
-            margin: 10px 0;
+            margin: 12px 0;
+            border: 1px solid #e4e9f5;
+            box-shadow: 0 8px 18px rgba(20, 48, 100, 0.08);
         }
         .news-date, .paper-meta {
             color: #555;
@@ -63,9 +110,18 @@
         code { background-color: #efefef; padding: 0 4px; border-radius: 4px; }
     </style>
     <script>
-        function showTab(tabId) {
+        function showTab(tabId, event) {
+            if (event) {
+                event.preventDefault();
+            }
             document.querySelectorAll('section').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
+
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active-tab'));
+            const activeLink = document.querySelector(`nav a[data-tab="${tabId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active-tab');
+            }
         }
 
         function formatDate(dateString) {
@@ -165,10 +221,10 @@
 
     <nav>
         <ul>
-            <li><a href="#" onclick="showTab('home')">Home</a></li>
-            <li><a href="#" onclick="showTab('members')">Group Members</a></li>
-            <li><a href="#" onclick="showTab('papers')">Research</a></li>
-            <li><a href="#" onclick="showTab('news')">News & Updates</a></li>
+            <li><a href="#" class="active-tab" data-tab="home" onclick="showTab('home', event)">Home</a></li>
+            <li><a href="#" data-tab="members" onclick="showTab('members', event)">Group Members</a></li>
+            <li><a href="#" data-tab="papers" onclick="showTab('papers', event)">Research</a></li>
+            <li><a href="#" data-tab="news" onclick="showTab('news', event)">News & Updates</a></li>
         </ul>
     </nav>
 
