@@ -8,17 +8,17 @@
     <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            line-height: 1.6; 
-            margin: 0; 
-            padding: 0; 
-            background-color: #f0f0f0; /* Light gray background color */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
         }
         footer {
-            padding-left: 20px; /* Indent the footer content */
-            background-color: #f2f2f2; /* Optional: background color for visibility */
-            text-align: center; /* Center-align text if desired */
+            padding-left: 20px;
+            background-color: #f2f2f2;
+            text-align: center;
         }
         header {
             position: relative;
@@ -33,23 +33,128 @@
         nav ul li { display: inline; margin-left: 20px; }
         section { display: none; }
         section.active { display: block; }
-        .member-list { display: flex; flex-wrap: wrap; gap: 20px; flex-direction: column;}
+        .member-list { display: flex; flex-wrap: wrap; gap: 20px; flex-direction: column; }
         .member { display: flex; flex-direction: column; align-items: center; width: 150px; text-align: center; }
-        .member p {margin: 0;}
-        .member p:first-of-type {font-weight: bold; /* Make the name bold */}
-        .member p:last-of-type {
-            margin-top: 4px; /* Small space between name and title */
-            font-size: 0.9em; /* Optional: slightly smaller font for title */
-        }
+        .member p { margin: 0; }
+        .member p:first-of-type { font-weight: bold; }
+        .member p:last-of-type { margin-top: 4px; font-size: 0.9em; }
         .member img { border-radius: 50%; width: 100px; height: 100px; object-fit: cover; }
-        .news { background-color: #f2f2f2; padding: 10px; margin: 20px 0; }
+        .news-card, .paper-card {
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 10px 0;
+        }
+        .news-date, .paper-meta {
+            color: #555;
+            font-size: 0.9em;
+        }
+        .inline-note {
+            font-size: 0.95em;
+            color: #333;
+            background: #fff8dc;
+            padding: 8px 10px;
+            border-left: 4px solid #c9a227;
+        }
+        .small {
+            font-size: 0.9em;
+            color: #333;
+        }
+        code { background-color: #efefef; padding: 0 4px; border-radius: 4px; }
     </style>
     <script>
         function showTab(tabId) {
-            document.querySelectorAll("section").forEach(tab => tab.classList.remove("active"));
-            document.getElementById(tabId).classList.add("active");
+            document.querySelectorAll('section').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
         }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (Number.isNaN(date.getTime())) {
+                return dateString;
+            }
+            return date.toLocaleDateString(undefined, {
+                year: 'numeric', month: 'short', day: 'numeric'
+            });
+        }
+
+        function renderNews(items, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                return;
+            }
+
+            if (!Array.isArray(items) || items.length === 0) {
+                container.innerHTML = '<p class="small">No news posted yet.</p>';
+                return;
+            }
+
+            container.innerHTML = items.map(item => {
+                const link = item.link ? `<p><a href="${item.link}" target="_blank" rel="noopener noreferrer">Read more</a></p>` : '';
+                return `
+                    <article class="news-card">
+                        <div class="news-date"><strong>${formatDate(item.date)}</strong></div>
+                        <h3>${item.title}</h3>
+                        <p>${item.details || ''}</p>
+                        ${link}
+                    </article>
+                `;
+            }).join('');
+        }
+
+        async function loadRecentArxivPapers() {
+            const list = document.getElementById('papers-list');
+            const status = document.getElementById('papers-status');
+            if (!list || !status) {
+                return;
+            }
+
+            status.textContent = 'Loading recent papers from arXiv...';
+
+            const query = 'https://export.arxiv.org/api/query?search_query=au:Dylan_Rankin&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending';
+
+            try {
+                const response = await fetch(query);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const xmlText = await response.text();
+                const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
+                const entries = Array.from(xml.querySelectorAll('entry'));
+
+                if (entries.length === 0) {
+                    status.textContent = 'No arXiv papers were returned.';
+                    return;
+                }
+
+                list.innerHTML = entries.map(entry => {
+                    const title = entry.querySelector('title')?.textContent?.trim().replace(/\s+/g, ' ') || 'Untitled';
+                    const published = entry.querySelector('published')?.textContent?.slice(0, 10) || '';
+                    const id = entry.querySelector('id')?.textContent || '#';
+                    const authors = Array.from(entry.querySelectorAll('author > name')).map(a => a.textContent?.trim()).filter(Boolean).join(', ');
+
+                    return `
+                        <li class="paper-card">
+                            <a href="${id}" target="_blank" rel="noopener noreferrer">${title}</a>
+                            <div class="paper-meta">${formatDate(published)}${authors ? ` • ${authors}` : ''}</div>
+                        </li>
+                    `;
+                }).join('');
+
+                status.textContent = 'Showing the latest papers from arXiv.';
+            } catch (error) {
+                status.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNews(window.NEWS_ITEMS || [], 'news-list-home');
+            renderNews(window.NEWS_ITEMS || [], 'news-list-full');
+            loadRecentArxivPapers();
+        });
     </script>
+    <script src="news-items.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -63,115 +168,56 @@
             <li><a href="#" onclick="showTab('home')">Home</a></li>
             <li><a href="#" onclick="showTab('members')">Group Members</a></li>
             <li><a href="#" onclick="showTab('papers')">Research</a></li>
-            <!-- <li><a href="#" onclick="showTab('news')">News & Updates</a></li> -->
+            <li><a href="#" onclick="showTab('news')">News & Updates</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <!-- Home Tab -->
         <section id="home" class="active">
             <h2>Welcome to the Rankin Lab</h2>
             <p>My primary research uses data from proton-proton collisions at the CERN Large Hadron Collider (LHC) to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics as well as precision measurements of known particles, particularly in the highly boosted regime. As part of this research I make use of machine learning (ML) for an array of tasks, including jet classification, mass regression, and event reconstruction. I see ML as an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. My recent interests in ML are focused on anomaly detection and self-supervised learning (particularly through contrastive learning).</p>
             <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
             <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
+
+            <h2>Latest News</h2>
+            <div id="news-list-home"></div>
+            <p class="small">To add a news item, edit <code>news-items.js</code> and add a new object at the top of the <code>NEWS_ITEMS</code> array.</p>
         </section>
 
-        <!-- Group Members Tab -->
         <section id="members">
             <h2>Group Members</h2>
             <div class="member-list">
-                <div class="member">
-                    <!-- <img src="images/hofung.jpg" alt="Ho Fung Tsoi"> -->
-                    <p>Dylan Rankin</p>
-                    <p>Assistant Professor</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/hofung.jpg" alt="Ho Fung Tsoi"> -->
-                    <p>Ho Fung Tsoi</p>
-                    <p>Postdoctoral Researcher</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/kaito.jpg" alt="Kaito Sugizaki"> -->
-                    <p>Kaito Sugizaki</p>
-                    <p>Postdoctoral Researcher</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/gwen.jpg" alt="Gwen Gardner"> -->
-                    <p>Gwen Gardner</p>
-                    <p>Ph.D. Candidate</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/maxcohen.jpg" alt="Max Cohen"> -->
-                    <p>Max Cohen</p>
-                    <p>Ph.D. Candidate</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/sterre.jpg" alt="Sterre Hoogendoorn"> -->
-                    <p>Sterre Hoogendoorn</p>
-                    <p>Ph.D. Candidate</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/chrisma.jpg" alt="Chris Ma"> -->
-                    <p>Chris Ma</p>
-                    <p>Ph.D. Candidate</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/ioannis.jpg" alt="Ioannis Kalaitzidis"> -->
-                    <p>Ioannis Kalaitzidis</p>
-                    <p>Undergraduate Student</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/vivek.jpg" alt="Vivek Krishnan"> -->
-                    <p>Vivek Krishnan</p>
-                    <p>Undergraduate Student</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/alexyang.jpg" alt="Alex Yang"> -->
-                    <p>Alex Yang</p>
-                    <p>Undergraduate Student</p>
-                </div>
-                <div class="member">
-                    <!-- <img src="images/louis.jpg" alt="Louis"> -->
-                    <p>Louis</p>
-                    <p>Lab Security</p>
-                </div>
-                <!-- Add or remove members as needed -->
+                <div class="member"><p>Dylan Rankin</p><p>Assistant Professor</p></div>
+                <div class="member"><p>Ho Fung Tsoi</p><p>Postdoctoral Researcher</p></div>
+                <div class="member"><p>Kaito Sugizaki</p><p>Postdoctoral Researcher</p></div>
+                <div class="member"><p>Gwen Gardner</p><p>Ph.D. Candidate</p></div>
+                <div class="member"><p>Max Cohen</p><p>Ph.D. Candidate</p></div>
+                <div class="member"><p>Sterre Hoogendoorn</p><p>Ph.D. Candidate</p></div>
+                <div class="member"><p>Chris Ma</p><p>Ph.D. Candidate</p></div>
+                <div class="member"><p>Ioannis Kalaitzidis</p><p>Undergraduate Student</p></div>
+                <div class="member"><p>Vivek Krishnan</p><p>Undergraduate Student</p></div>
+                <div class="member"><p>Alex Yang</p><p>Undergraduate Student</p></div>
+                <div class="member"><p>Louis</p><p>Lab Security</p></div>
             </div>
-            <!-- <h2>Past Group Members</h2> 
-            </div> -->
         </section>
 
-        <!-- Publications Tab -->
         <section id="papers">
-            <p>See also: 
-                <a href="https://inspirehep.net/authors/1246648" target="_blank"><i class="fas fa-book"></i> INSPIRE</a></li>, 
-                <a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a></li>, 
-                <a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a></li>
+            <p>See also:
+                <a href="https://inspirehep.net/authors/1246648" target="_blank"><i class="fas fa-book"></i> INSPIRE</a>,
+                <a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a>,
+                <a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a>
             </p>
-            <h2>Publications</h2>
-            <ul>
-                <li><a href="https://doi.org/10.48550/arXiv.2410.13947" target="_blank">"MACK: Mismodeling Addressed with Contrastive Knowledge." arXiv preprint 2410.13947, (2024)</a></li>
-                <li><a href="https://doi.org/10.1088/2632-2153/acc0d7" target="_blank">"Ultra-low latency recurrent neural network inference on FPGAs for physics applications with hls4ml. Machine Learning: Science and Technology 4.2, (2023)"</a></li>
-                <li><a href="https://doi.org/10.1038/s41550-022-01651-w" target="_blank">"Hardware-accelerated inference for real-time gravitational-wave astronomy." Nat Astron, (2022)</a></li>
-                <li><a href="https://doi.org/10.1007/JHEP06(2021)030" target="_blank">"Quasi anomalous knowledge: searching for new physics with embedded knowledge." Journal of High Energy Physics 2021.6, (2021)</a></li>
-                <li><a href="https://doi.org/10.1088/2632-2153/abec21" target="_blank">"GPU coprocessors as a service for deep learning inference in high energy physics." Machine Learning: Science and Technology 2.3, (2021)</a></li>
-                <li><a href="https://doi.org/10.1109/H2RC51942.2020.00010" target="_blank">"FPGAs-as-a-service toolkit (FaaST)." 2020 IEEE/ACM International Workshop on Heterogeneous High-performance Reconfigurable Computing (H2RC), (2020)</a></li>
-                <li><a href="https://doi.org/10.1007/JHEP12(2020)085" target="_blank">"Inclusive search for highly boosted Higgs bosons decaying to bottom quark-antiquark pairs in proton-proton collisions at sqrt(s) = 13 TeV." J. High Energy Phys. 12, 85, (2020)</a></li>
-                <!-- Add or remove papers as needed -->
-            </ul>
+            <h2>Recent Papers (auto-loaded from arXiv)</h2>
+            <p id="papers-status" class="inline-note"></p>
+            <ul id="papers-list"></ul>
             <p><a href="documents/DSR_CV.pdf" target="_blank">Download Prof. Rankin's CV</a></p>
         </section>
 
-        <!-- News & Updates Tab 
         <section id="news">
             <h2>News & Updates</h2>
-            <div class="news">
-                <p><strong>[Date]</strong> - Group member [Name] has successfully defended their Ph.D. thesis on [Topic]!</p>
-            </div>
-            <div class="news">
-                <p><strong>[Date]</strong> - Our latest paper on [Research Topic] has been published in [Journal].</p>
-            </div> 
-        </section> -->
+            <div id="news-list-full"></div>
+            <p class="small">Easy update workflow: open <code>news-items.js</code>, add a new entry at the top, and deploy.</p>
+        </section>
     </div>
 
     <footer>
