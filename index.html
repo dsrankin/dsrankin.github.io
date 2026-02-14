@@ -181,30 +181,6 @@
             });
         }
 
-        function renderNews(items, containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) {
-                return;
-            }
-
-            if (!Array.isArray(items) || items.length === 0) {
-                container.innerHTML = '<p class="small">No news posted yet.</p>';
-                return;
-            }
-
-            container.innerHTML = items.map(item => {
-                const link = item.link ? `<p><a href="${item.link}" target="_blank" rel="noopener noreferrer">Read more</a></p>` : '';
-                return `
-                    <article class="news-card">
-                        <div class="news-date"><strong>${formatDate(item.date)}</strong></div>
-                        <h3>${item.title}</h3>
-                        <p>${item.details || ''}</p>
-                        ${link}
-                    </article>
-                `;
-            }).join('');
-        }
-
         function renderLabPhotos(photos) {
             const profilePhoto = document.getElementById('profile-photo');
             const groupPhoto = document.getElementById('group-photo');
@@ -326,13 +302,10 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderLabPhotos(window.LAB_PHOTOS || {});
             renderMembers(window.GROUP_MEMBERS || []);
-            renderNews(window.NEWS_ITEMS || [], 'news-list-home');
-            renderNews(window.NEWS_ITEMS || [], 'news-list-full');
             loadRecentArxivPapers();
         });
     </script>
     <script src="people-data.js"></script>
-    <script src="news-items.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -346,7 +319,6 @@
             <li><a href="#" class="active-tab" data-tab="home" onclick="showTab('home', event)">Home</a></li>
             <li><a href="#" data-tab="members" onclick="showTab('members', event)">Group Members</a></li>
             <li><a href="#" data-tab="papers" onclick="showTab('papers', event)">Research</a></li>
-            <li><a href="#" data-tab="news" onclick="showTab('news', event)">News & Updates</a></li>
         </ul>
     </nav>
 
@@ -369,8 +341,6 @@
             <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
             <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
 
-            <h2>Latest News</h2>
-            <div id="news-list-home"></div>
         </section>
 
         <section id="members">
@@ -389,11 +359,6 @@
             <p id="papers-status" class="inline-note"></p>
             <ul id="papers-list"></ul>
             <p><a href="documents/DSR_CV.pdf" target="_blank">Download Prof. Rankin's CV</a></p>
-        </section>
-
-        <section id="news">
-            <h2>News & Updates</h2>
-            <div id="news-list-full"></div>
         </section>
     </div>
 
