@@ -271,14 +271,36 @@
                 '';
         }
 
+        function renderPaperCards(entries, limit) {
+            return entries.slice(0, limit).map(entry => {
+                const title = getXmlText(entry, 'title').replace(/\s+/g, ' ') || 'Untitled';
+                const published = getXmlText(entry, 'published').slice(0, 10);
+                const id = getXmlText(entry, 'id') || '#';
+                const authors = Array.from(entry.getElementsByTagName('name'))
+                    .map(a => a.textContent?.trim())
+                    .filter(Boolean)
+                    .join(', ');
+
+                return `
+                    <li class="paper-card">
+                        <a href="${id}" target="_blank" rel="noopener noreferrer">${title}</a>
+                        <div class="paper-meta">${formatDate(published)}${authors ? ` • ${authors}` : ''}</div>
+                    </li>
+                `;
+            }).join('');
+        }
+
         async function loadRecentArxivPapers() {
             const list = document.getElementById('papers-list');
             const status = document.getElementById('papers-status');
-            if (!list || !status) {
+            const homeList = document.getElementById('home-papers-list');
+            const homeStatus = document.getElementById('home-papers-status');
+            if (!list || !status || !homeList || !homeStatus) {
                 return;
             }
 
             status.textContent = 'Loading recent papers from arXiv...';
+            homeStatus.textContent = 'Loading recent papers from arXiv...';
 
             const query = 'https://export.arxiv.org/api/query?search_query=au:Dylan_Rankin&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending';
 
@@ -297,26 +319,14 @@
                     return;
                 }
 
-                list.innerHTML = entries.map(entry => {
-                    const title = getXmlText(entry, 'title').replace(/\s+/g, ' ') || 'Untitled';
-                    const published = getXmlText(entry, 'published').slice(0, 10);
-                    const id = getXmlText(entry, 'id') || '#';
-                    const authors = Array.from(entry.getElementsByTagName('name'))
-                        .map(a => a.textContent?.trim())
-                        .filter(Boolean)
-                        .join(', ');
-
-                    return `
-                        <li class="paper-card">
-                            <a href="${id}" target="_blank" rel="noopener noreferrer">${title}</a>
-                            <div class="paper-meta">${formatDate(published)}${authors ? ` • ${authors}` : ''}</div>
-                        </li>
-                    `;
-                }).join('');
+                list.innerHTML = renderPaperCards(entries, 8);
+                homeList.innerHTML = renderPaperCards(entries, 2);
 
                 status.textContent = 'Showing the latest papers from arXiv.';
+                homeStatus.textContent = 'Showing the two latest papers from arXiv.';
             } catch (error) {
                 status.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
+                homeStatus.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
             }
         }
 
@@ -362,6 +372,10 @@
             <p>My primary research uses data from proton-proton collisions at the CERN Large Hadron Collider (LHC) to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics as well as precision measurements of known particles, particularly in the highly boosted regime. As part of this research I make use of machine learning (ML) for an array of tasks, including jet classification, mass regression, and event reconstruction. I see ML as an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. My recent interests in ML are focused on anomaly detection and self-supervised learning.</p>
             <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
             <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
+            <p><a href="#" onclick="showTab('papers', event)">Go to the Research tab for the full publications list.</a></p>
+            <h3>Most Recent arXiv Papers</h3>
+            <p id="home-papers-status" class="inline-note"></p>
+            <ul id="home-papers-list"></ul>
 
         </section>
 
