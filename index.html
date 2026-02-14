@@ -68,11 +68,15 @@
         section { display: none; }
         section.active { display: block; }
         .member-list { display: flex; flex-wrap: wrap; gap: 20px; flex-direction: column; }
+        .member-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 18px;
+        }
         .member {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 180px;
             text-align: center;
             background: #ffffff;
             border-radius: 12px;
@@ -83,7 +87,44 @@
         .member p { margin: 0; }
         .member p:first-of-type { font-weight: bold; }
         .member p:last-of-type { margin-top: 4px; font-size: 0.9em; }
-        .member img { border-radius: 50%; width: 100px; height: 100px; object-fit: cover; }
+        .member img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .member-photo {
+            width: 112px;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 2px solid #eef3ff;
+        }
+        .lab-photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 14px 0 20px;
+        }
+        .lab-photo {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e4e9f5;
+            box-shadow: 0 8px 18px rgba(20, 48, 100, 0.08);
+        }
+        .lab-photo img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+        }
+        .lab-photo figcaption {
+            padding: 8px 10px;
+            font-size: 0.9em;
+            color: #334;
+        }
         .news-card, .paper-card {
             background-color: #ffffff;
             border-radius: 12px;
@@ -153,6 +194,39 @@
                         <h3>${item.title}</h3>
                         <p>${item.details || ''}</p>
                         ${link}
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderLabPhotos(photos) {
+            const profilePhoto = document.getElementById('profile-photo');
+            const groupPhoto = document.getElementById('group-photo');
+            if (!profilePhoto || !groupPhoto) {
+                return;
+            }
+
+            profilePhoto.src = photos.profile?.src || 'images/people/your-photo.svg';
+            profilePhoto.alt = photos.profile?.alt || 'Portrait photo';
+            groupPhoto.src = photos.group?.src || 'images/people/group-photo.svg';
+            groupPhoto.alt = photos.group?.alt || 'Group photo';
+        }
+
+        function renderMembers(members) {
+            const list = document.getElementById('member-list');
+            if (!list) {
+                return;
+            }
+
+            list.innerHTML = members.map(member => {
+                const photoSrc = member.photo || 'images/people/member-placeholder.svg';
+                return `
+                    <article class="member">
+                        <div class="member-photo">
+                            <img src="${photoSrc}" alt="${member.name}">
+                        </div>
+                        <p>${member.name}</p>
+                        <p>${member.role}</p>
                     </article>
                 `;
             }).join('');
@@ -244,11 +318,14 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            renderLabPhotos(window.LAB_PHOTOS || {});
+            renderMembers(window.GROUP_MEMBERS || []);
             renderNews(window.NEWS_ITEMS || [], 'news-list-home');
             renderNews(window.NEWS_ITEMS || [], 'news-list-full');
             loadRecentArxivPapers();
         });
     </script>
+    <script src="people-data.js"></script>
     <script src="news-items.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -270,6 +347,16 @@
     <div class="container">
         <section id="home" class="active">
             <h2>Welcome to the Rankin Lab</h2>
+            <div class="lab-photo-grid">
+                <figure class="lab-photo">
+                    <img id="profile-photo" src="images/people/your-photo.svg" alt="Portrait photo">
+                    <figcaption>Your photo (replace in <code>people-data.js</code>)</figcaption>
+                </figure>
+                <figure class="lab-photo">
+                    <img id="group-photo" src="images/people/group-photo.svg" alt="Group photo">
+                    <figcaption>Group photo (replace in <code>people-data.js</code>)</figcaption>
+                </figure>
+            </div>
             <p>My primary research uses data from proton-proton collisions at the CERN Large Hadron Collider (LHC) to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics as well as precision measurements of known particles, particularly in the highly boosted regime. As part of this research I make use of machine learning (ML) for an array of tasks, including jet classification, mass regression, and event reconstruction. I see ML as an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. My recent interests in ML are focused on anomaly detection and self-supervised learning.</p>
             <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
             <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
@@ -280,16 +367,8 @@
 
         <section id="members">
             <h2>Group Members</h2>
-            <div class="member-list">
-                <div class="member"><p>Dylan Rankin</p><p>Assistant Professor</p></div>
-                <div class="member"><p>Ho Fung Tsoi</p><p>Postdoctoral Researcher</p></div>
-                <div class="member"><p>Kaito Sugizaki</p><p>Postdoctoral Researcher</p></div>
-                <div class="member"><p>Gwen Gardner</p><p>Ph.D. Candidate</p></div>
-                <div class="member"><p>Max Cohen</p><p>Ph.D. Candidate</p></div>
-                <div class="member"><p>Sterre Hoogendoorn</p><p>Ph.D. Candidate</p></div>
-                <div class="member"><p>Chris Ma</p><p>Ph.D. Candidate</p></div>
-                <div class="member"><p>Louis</p><p>Lab Security</p></div>
-            </div>
+            <p class="small">To update names, roles, and photos, edit <code>people-data.js</code>. Place images in <code>images/people/</code>.</p>
+            <div id="member-list" class="member-list"></div>
         </section>
 
         <section id="papers">
