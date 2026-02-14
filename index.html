@@ -102,6 +102,42 @@
             }).join('');
         }
 
+        async function fetchArxivFeed(queryUrl) {
+            const encodedQuery = encodeURIComponent(queryUrl);
+            const candidateUrls = [
+                queryUrl,
+                `https://corsproxy.io/?${encodedQuery}`,
+                `https://api.allorigins.win/raw?url=${encodedQuery}`
+            ];
+
+            let lastError = null;
+            for (const url of candidateUrls) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const text = await response.text();
+                    if (!text || text.trim().length === 0) {
+                        throw new Error('Empty response body');
+                    }
+
+                    return text;
+                } catch (error) {
+                    lastError = error;
+                }
+            }
+
+            throw lastError || new Error('No arXiv endpoint could be loaded.');
+        }
+
+        function getXmlText(node, tagName) {
+            return node.getElementsByTagName(tagName)[0]?.textContent?.trim() ||
+                node.getElementsByTagName(`atom:${tagName}`)[0]?.textContent?.trim() ||
+                '';
+        }
+
         async function loadRecentArxivPapers() {
             const list = document.getElementById('papers-list');
             const status = document.getElementById('papers-status');
@@ -114,14 +150,14 @@
             const query = 'https://export.arxiv.org/api/query?search_query=au:Dylan_Rankin&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending';
 
             try {
-                const response = await fetch(query);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                const xmlText = await fetchArxivFeed(query);
+                const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
+                const parserError = xml.getElementsByTagName('parsererror')[0];
+                if (parserError) {
+                    throw new Error('Could not parse arXiv XML feed.');
                 }
 
-                const xmlText = await response.text();
-                const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
-                const entries = Array.from(xml.querySelectorAll('entry'));
+                const entries = Array.from(xml.getElementsByTagName('entry'));
 
                 if (entries.length === 0) {
                     status.textContent = 'No arXiv papers were returned.';
@@ -129,10 +165,13 @@
                 }
 
                 list.innerHTML = entries.map(entry => {
-                    const title = entry.querySelector('title')?.textContent?.trim().replace(/\s+/g, ' ') || 'Untitled';
-                    const published = entry.querySelector('published')?.textContent?.slice(0, 10) || '';
-                    const id = entry.querySelector('id')?.textContent || '#';
-                    const authors = Array.from(entry.querySelectorAll('author > name')).map(a => a.textContent?.trim()).filter(Boolean).join(', ');
+                    const title = getXmlText(entry, 'title').replace(/\s+/g, ' ') || 'Untitled';
+                    const published = getXmlText(entry, 'published').slice(0, 10);
+                    const id = getXmlText(entry, 'id') || '#';
+                    const authors = Array.from(entry.getElementsByTagName('name'))
+                        .map(a => a.textContent?.trim())
+                        .filter(Boolean)
+                        .join(', ');
 
                     return `
                         <li class="paper-card">
