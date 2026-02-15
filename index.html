@@ -350,8 +350,8 @@
                 list.innerHTML = renderPaperCards(combinedPapers, 8);
                 homeList.innerHTML = renderPaperCards(combinedPapers, 2);
 
-                status.textContent = 'Showing recent papers from arXiv and manually maintained entries.';
-                homeStatus.textContent = 'Showing the two latest papers from arXiv and manually maintained entries.';
+                status.textContent = 'Showing recent papers.';
+                homeStatus.textContent = 'Showing the two latest work.';
             } catch (error) {
                 if (manualPapers.length > 0) {
                     const combinedPapers = combineAndSortPapers([], manualPapers);
