@@ -271,19 +271,44 @@
                 '';
         }
 
-        function renderPaperCards(entries, limit) {
-            return entries.slice(0, limit).map(entry => {
+        function normalizeArxivEntries(entries) {
+            return entries.map(entry => {
                 const title = getXmlText(entry, 'title').replace(/\s+/g, ' ') || 'Untitled';
                 const published = getXmlText(entry, 'published').slice(0, 10);
-                const id = getXmlText(entry, 'id') || '#';
+                const link = getXmlText(entry, 'id') || '#';
                 const authors = Array.from(entry.getElementsByTagName('name'))
-                    .map(a => a.textContent?.trim())
+                    .map(authorNode => authorNode.textContent?.trim())
                     .filter(Boolean)
                     .join(', ');
 
+                return {
+                    title,
+                    published,
+                    link,
+                    authors
+                };
+            });
+        }
+
+        function combineAndSortPapers(arxivPapers = [], manualPapers = []) {
+            const merged = [...arxivPapers, ...manualPapers];
+            return merged.sort((a, b) => {
+                const aTime = Date.parse(a.published || '') || 0;
+                const bTime = Date.parse(b.published || '') || 0;
+                return bTime - aTime;
+            });
+        }
+
+        function renderPaperCards(entries, limit) {
+            return entries.slice(0, limit).map(entry => {
+                const title = (entry.title || 'Untitled').replace(/\s+/g, ' ');
+                const published = entry.published || '';
+                const link = entry.link || '#';
+                const authors = entry.authors || '';
+
                 return `
                     <li class="paper-card">
-                        <a href="${id}" target="_blank" rel="noopener noreferrer">${title}</a>
+                        <a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a>
                         <div class="paper-meta">${formatDate(published)}${authors ? ` • ${authors}` : ''}</div>
                     </li>
                 `;
@@ -303,6 +328,7 @@
             homeStatus.textContent = 'Loading recent papers from arXiv...';
 
             const query = 'https://export.arxiv.org/api/query?search_query=au:Dylan_Rankin&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending';
+            const manualPapers = window.MANUAL_PAPERS || [];
 
             try {
                 const xmlText = await fetchArxivFeed(query);
@@ -313,18 +339,29 @@
                 }
 
                 const entries = Array.from(xml.getElementsByTagName('entry'));
+                const arxivPapers = normalizeArxivEntries(entries);
+                const combinedPapers = combineAndSortPapers(arxivPapers, manualPapers);
 
-                if (entries.length === 0) {
+                if (combinedPapers.length === 0) {
                     status.textContent = 'No arXiv papers were returned.';
                     return;
                 }
 
-                list.innerHTML = renderPaperCards(entries, 8);
-                homeList.innerHTML = renderPaperCards(entries, 2);
+                list.innerHTML = renderPaperCards(combinedPapers, 8);
+                homeList.innerHTML = renderPaperCards(combinedPapers, 2);
 
-                status.textContent = 'Showing the latest papers from arXiv.';
-                homeStatus.textContent = 'Showing the two latest papers from arXiv.';
+                status.textContent = 'Showing recent papers from arXiv and manually maintained entries.';
+                homeStatus.textContent = 'Showing the two latest papers from arXiv and manually maintained entries.';
             } catch (error) {
+                if (manualPapers.length > 0) {
+                    const combinedPapers = combineAndSortPapers([], manualPapers);
+                    list.innerHTML = renderPaperCards(combinedPapers, 8);
+                    homeList.innerHTML = renderPaperCards(combinedPapers, 2);
+                    status.innerHTML = 'Unable to load live arXiv results in this browser/session; showing manually maintained papers. You can also use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
+                    homeStatus.innerHTML = 'Unable to load live arXiv results in this browser/session; showing manually maintained papers.';
+                    return;
+                }
+
                 status.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
                 homeStatus.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
             }
@@ -337,6 +374,7 @@
         });
     </script>
     <script src="people-data.js"></script>
+    <script src="papers-data.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
