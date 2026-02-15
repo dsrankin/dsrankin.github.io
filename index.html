@@ -97,6 +97,12 @@
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 18px;
         }
+        .member-group {
+            margin-bottom: 28px;
+        }
+        .member-group h3 {
+            margin: 0 0 12px;
+        }
         .member {
             display: flex;
             flex-direction: column;
@@ -240,7 +246,13 @@
                 return;
             }
 
-            list.innerHTML = members.map(member => {
+            const categories = ['Postdocs', 'Students', 'Support Staff'];
+            const membersByCategory = categories.reduce((grouped, category) => {
+                grouped[category] = members.filter(member => member.category === category);
+                return grouped;
+            }, {});
+
+            const renderMemberCard = (member) => {
                 const photoSrc = normalizePhotoPath(member.photo);
                 return `
                     <article class="member">
@@ -251,7 +263,16 @@
                         <p>${member.role}</p>
                     </article>
                 `;
-            }).join('');
+            };
+
+            list.innerHTML = categories.map(category => `
+                <section class="member-group">
+                    <h3>${category}</h3>
+                    <div class="member-list">
+                        ${membersByCategory[category].map(renderMemberCard).join('')}
+                    </div>
+                </section>
+            `).join('');
         }
 
         async function fetchArxivFeed(queryUrl) {
