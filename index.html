@@ -246,7 +246,7 @@
                 return;
             }
 
-            const categories = ['Postdocs', 'Students', 'Support Staff'];
+            const categories = ['Postdocs', 'Students', 'Lab Security'];
             const membersByCategory = categories.reduce((grouped, category) => {
                 grouped[category] = members.filter(member => member.category === category);
                 return grouped;

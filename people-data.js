@@ -18,5 +18,5 @@ window.GROUP_MEMBERS = [
   { name: 'Max Cohen', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/member-placeholder.svg' },
   { name: 'Sterre Hoogendoorn', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/member-placeholder.svg' },
   { name: 'Chris Ma', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/member-placeholder.svg' },
-  { name: 'Louis', role: 'Lab Security', category: 'Support Staff', photo: 'images/people/louis.jpg' }
+  { name: 'Louis', role: 'Lab Security', category: 'Lab Security', photo: 'images/people/louis.jpg' }
 ];
