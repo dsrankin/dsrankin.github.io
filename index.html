@@ -37,6 +37,24 @@
             background: linear-gradient(140deg, #011f5b, #04358f 58%, #2663d7 100%);
             box-shadow: 0 8px 20px rgba(1, 31, 91, 0.35);
         }
+        .banner-headshot {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            width: 108px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.92);
+            box-shadow: 0 10px 20px rgba(2, 16, 48, 0.4);
+            background: rgba(255, 255, 255, 0.18);
+        }
+        .banner-headshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
         .container {
             width: min(900px, 90%);
             margin: 24px auto 0;
@@ -203,16 +221,17 @@
         }
 
         function renderLabPhotos(photos) {
-            const profilePhoto = document.getElementById('profile-photo');
-            const groupPhoto = document.getElementById('group-photo');
-            if (!profilePhoto || !groupPhoto) {
-                return;
+            const bannerHeadshot = document.getElementById('banner-headshot');
+            if (bannerHeadshot) {
+                bannerHeadshot.src = normalizePhotoPath(photos.profile?.src, 'images/people/dylan-rankin.png');
+                bannerHeadshot.alt = photos.profile?.alt || 'Portrait photo';
             }
 
-            profilePhoto.src = normalizePhotoPath(photos.profile?.src, 'images/people/dylan-rankin.png');
-            profilePhoto.alt = photos.profile?.alt || 'Portrait photo';
-            groupPhoto.src = normalizePhotoPath(photos.group?.src, 'images/people/group-photo.svg');
-            groupPhoto.alt = photos.group?.alt || 'Group photo';
+            const groupPhoto = document.getElementById('group-photo');
+            if (groupPhoto) {
+                groupPhoto.src = normalizePhotoPath(photos.group?.src, 'images/people/group-photo.svg');
+                groupPhoto.alt = photos.group?.alt || 'Group photo';
+            }
         }
 
         function renderMembers(members) {
@@ -379,6 +398,9 @@
 </head>
 <body>
     <header>
+        <div class="banner-headshot">
+            <img id="banner-headshot" src="images/people/dylan-rankin.png" alt="Portrait of Prof. Rankin" onerror="this.src='images/people/member-placeholder.svg'">
+        </div>
         <h1>Rankin Lab</h1>
         <h2>University of Pennsylvania, Department of Physics and Astronomy</h2>
     </header>
