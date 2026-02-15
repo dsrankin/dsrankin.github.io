@@ -91,7 +91,11 @@
         }
         section { display: none; }
         section.active { display: block; }
-        .member-list { display: flex; flex-wrap: wrap; gap: 20px; flex-direction: column; }
+        .member-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
         .member-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -266,12 +270,12 @@
             };
 
             list.innerHTML = categories.map(category => `
-                <section class="member-group">
+                <div class="member-group">
                     <h3>${category}</h3>
                     <div class="member-list">
                         ${membersByCategory[category].map(renderMemberCard).join('')}
                     </div>
-                </section>
+                </div>
             `).join('');
         }
 
@@ -463,7 +467,7 @@
         <section id="members">
             <h2>Group Members</h2>
             <!--<p class="small">To update names, roles, and photos, edit <code>people-data.js</code>. Place images in <code>images/people/</code>.</p>-->
-            <div id="member-list" class="member-list"></div>
+            <div id="member-list" class="member-groups"></div>
         </section>
 
         <section id="papers">
