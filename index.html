@@ -351,10 +351,12 @@
                 const title = getXmlText(entry, 'title').replace(/\s+/g, ' ') || 'Untitled';
                 const published = getXmlText(entry, 'published').slice(0, 10);
                 const link = getXmlText(entry, 'id') || '#';
-                const authors = Array.from(entry.getElementsByTagName('name'))
+                const authorNames = Array.from(entry.getElementsByTagName('name'))
                     .map(authorNode => authorNode.textContent?.trim())
-                    .filter(Boolean)
-                    .join(', ');
+                    .filter(Boolean);
+                const authors = authorNames.length > 20
+                    ? `${authorNames.slice(0, 5).join(', ')} et al.`
+                    : authorNames.join(', ');
 
                 return {
                     title,
