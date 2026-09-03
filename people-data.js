@@ -21,5 +21,5 @@ window.GROUP_MEMBERS = [
 ];
 
 window.FORMER_MEMBERS = [
-  { name: 'Gwen Gardner', role: 'Ph.D. Candidate' }
+  { name: 'Gwen Gardner', role: 'Ph.D. July 2026' }
 ];
