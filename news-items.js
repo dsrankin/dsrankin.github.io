@@ -14,9 +14,9 @@ window.NEWS_ITEMS = [
     link: 'https://cerncourier.com/a/the-most-elusive-higgsinos/'
   },
   {
-    date: '2026-01-21',
-    title: 'jBOT preprint posted on arXiv',
+    date: '2025-04-16',
+    title: 'Penn ATLAS shares 2025 Breakthrough Prize in Fundamental Physics',
     details: '',
-    link: 'https://arxiv.org/abs/2601.11719'
+    link: 'https://penntoday.upenn.edu/news/penn-atlas-shares-2025-breakthrough-prize-fundamental-physics'
   },
 ];

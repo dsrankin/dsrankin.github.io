@@ -275,6 +275,15 @@
             `).join('');
         }
 
+        function renderFormerMembers(members) {
+            const list = document.getElementById('former-member-list');
+            if (!list) {
+                return;
+            }
+
+            list.textContent = members.map(member => `${member.name} (${member.role})`).join(', ');
+        }
+
         function renderNewsItems(items) {
             const list = document.getElementById('news-list');
             if (!list) {
@@ -436,6 +445,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderLabPhotos(window.LAB_PHOTOS || {});
             renderMembers(window.GROUP_MEMBERS || []);
+            renderFormerMembers(window.FORMER_MEMBERS || []);
             renderNewsItems(window.NEWS_ITEMS || []);
             loadRecentArxivPapers();
         });
@@ -493,6 +503,8 @@
             <h2>Group Members</h2>
             <!--<p class="small">To update names, roles, and photos, edit <code>people-data.js</code>. Place images in <code>images/people/</code>.</p>-->
             <div id="member-list" class="member-groups"></div>
+            <h3>Former Members</h3>
+            <p id="former-member-list" class="small"></p>
         </section>
 
         <section id="papers">
