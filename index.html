@@ -275,6 +275,32 @@
             `).join('');
         }
 
+        function renderNewsItems(items) {
+            const list = document.getElementById('news-list');
+            if (!list) {
+                return;
+            }
+
+            const sorted = [...items].sort((a, b) => {
+                const aTime = Date.parse(a.date || '') || 0;
+                const bTime = Date.parse(b.date || '') || 0;
+                return bTime - aTime;
+            });
+
+            list.innerHTML = sorted.map(item => {
+                const title = item.link
+                    ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
+                    : item.title;
+                return `
+                    <article class="news-card">
+                        <div class="news-date">${formatDate(item.date)}</div>
+                        <p>${title}</p>
+                        ${item.details ? `<p class="small">${item.details}</p>` : ''}
+                    </article>
+                `;
+            }).join('');
+        }
+
         async function fetchArxivFeed(queryUrl) {
             const encodedQuery = encodeURIComponent(queryUrl);
             const candidateUrls = [
@@ -410,11 +436,13 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderLabPhotos(window.LAB_PHOTOS || {});
             renderMembers(window.GROUP_MEMBERS || []);
+            renderNewsItems(window.NEWS_ITEMS || []);
             loadRecentArxivPapers();
         });
     </script>
     <script src="people-data.js"></script>
     <script src="papers-data.js"></script>
+    <script src="news-items.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -431,6 +459,7 @@
             <li><a href="#" class="active-tab" data-tab="home" onclick="showTab('home', event)">Home</a></li>
             <li><a href="#" data-tab="members" onclick="showTab('members', event)">Group Members</a></li>
             <li><a href="#" data-tab="papers" onclick="showTab('papers', event)">Research</a></li>
+            <li><a href="#" data-tab="news" onclick="showTab('news', event)">News</a></li>
         </ul>
     </nav>
 
@@ -476,6 +505,11 @@
             <p id="papers-status" class="inline-note"></p>
             <ul id="papers-list"></ul>
             <p><a href="documents/DSR_CV.pdf" target="_blank">Download Prof. Rankin's CV</a></p>
+        </section>
+
+        <section id="news">
+            <h2>News</h2>
+            <div id="news-list"></div>
         </section>
     </div>
 
