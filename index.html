@@ -156,6 +156,29 @@
             font-size: 0.9em;
             color: #334;
         }
+        .home-news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 14px 0 20px;
+        }
+        .home-news-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e4e9f5;
+            box-shadow: 0 8px 18px rgba(20, 48, 100, 0.08);
+        }
+        .home-news-card img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+        }
+        .home-news-body {
+            padding: 10px 14px;
+        }
+        .home-news-body p { margin: 0; }
         .news-card, .paper-card {
             background-color: #ffffff;
             border-radius: 12px;
@@ -284,19 +307,21 @@
             list.textContent = members.map(member => `${member.name} (${member.role})`).join(', ');
         }
 
+        function sortNewsItems(items) {
+            return [...items].sort((a, b) => {
+                const aTime = Date.parse(a.date || '') || 0;
+                const bTime = Date.parse(b.date || '') || 0;
+                return bTime - aTime;
+            });
+        }
+
         function renderNewsItems(items) {
             const list = document.getElementById('news-list');
             if (!list) {
                 return;
             }
 
-            const sorted = [...items].sort((a, b) => {
-                const aTime = Date.parse(a.date || '') || 0;
-                const bTime = Date.parse(b.date || '') || 0;
-                return bTime - aTime;
-            });
-
-            list.innerHTML = sorted.map(item => {
+            list.innerHTML = sortNewsItems(items).map(item => {
                 const title = item.link
                     ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
                     : item.title;
@@ -305,6 +330,31 @@
                         <div class="news-date">${formatDate(item.date)}</div>
                         <p>${title}</p>
                         ${item.details ? `<p class="small">${item.details}</p>` : ''}
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderHomeNews(items, limit = 2) {
+            const list = document.getElementById('home-news-list');
+            if (!list) {
+                return;
+            }
+
+            list.innerHTML = sortNewsItems(items).slice(0, limit).map(item => {
+                const titleHtml = item.link
+                    ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
+                    : item.title;
+                const thumbHtml = item.thumb
+                    ? `<img src="${encodeURI(item.thumb)}" alt="${item.title}">`
+                    : '';
+                return `
+                    <article class="home-news-card">
+                        ${thumbHtml}
+                        <div class="home-news-body">
+                            <div class="news-date">${formatDate(item.date)}</div>
+                            <p>${titleHtml}</p>
+                        </div>
                     </article>
                 `;
             }).join('');
@@ -449,6 +499,7 @@
             renderMembers(window.GROUP_MEMBERS || []);
             renderFormerMembers(window.FORMER_MEMBERS || []);
             renderNewsItems(window.NEWS_ITEMS || []);
+            renderHomeNews(window.NEWS_ITEMS || []);
             loadRecentArxivPapers();
         });
     </script>
@@ -495,6 +546,9 @@
             <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
             <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
             <p><a href="#" onclick="showTab('papers', event)">Go to the Research tab for a more complete publications list.</a></p>
+            <h3>Latest News</h3>
+            <div id="home-news-list" class="home-news-grid"></div>
+            <p><a href="#" onclick="showTab('news', event)">Go to the News tab for more.</a></p>
             <h3>Latest Work</h3>
             <p id="home-papers-status" class="inline-note"></p>
             <ul id="home-papers-list"></ul>
