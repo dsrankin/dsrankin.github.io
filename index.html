@@ -310,6 +310,10 @@
             list.textContent = members.map(member => `${member.name} (${member.role})`).join(', ');
         }
 
+        function escapeAttr(value) {
+            return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        }
+
         function sortNewsItems(items) {
             return [...items].sort((a, b) => {
                 const aTime = Date.parse(a.date || '') || 0;
@@ -349,7 +353,7 @@
                     ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
                     : item.title;
                 const thumbHtml = item.thumb
-                    ? `<img src="${encodeURI(item.thumb)}" alt="${item.title}">`
+                    ? `<img src="${encodeURI(item.thumb)}" alt="${escapeAttr(item.title)}">`
                     : '';
                 return `
                     <article class="home-news-card">
