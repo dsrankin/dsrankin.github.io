@@ -278,12 +278,15 @@
 
             const renderMemberCard = (member) => {
                 const photoSrc = normalizePhotoPath(member.photo);
+                const nameHtml = member.link
+                    ? `<a href="${member.link}" target="_blank" rel="noopener noreferrer">${member.name}</a>`
+                    : member.name;
                 return `
                     <article class="member">
                         <div class="member-photo">
                             <img src="${photoSrc}" alt="${member.name}" onerror="this.src='images/people/member-placeholder.svg'">
                         </div>
-                        <p>${member.name}</p>
+                        <p>${nameHtml}</p>
                         <p>${member.role}</p>
                     </article>
                 `;
