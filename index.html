@@ -307,7 +307,10 @@
                 return;
             }
 
-            list.textContent = members.map(member => `${member.name} (${member.role})`).join(', ');
+            list.innerHTML = members.map(member => {
+                const base = `${escapeAttr(member.name)} (${escapeAttr(member.role)})`;
+                return member.thesis ? `${base}, <em>${escapeAttr(member.thesis)}</em>` : base;
+            }).join(', ');
         }
 
         function escapeAttr(value) {

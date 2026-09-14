@@ -12,7 +12,7 @@ window.LAB_PHOTOS = {
 };
 
 window.GROUP_MEMBERS = [
-  { name: 'Ho Fung Tsoi', role: 'Postdoctoral Researcher', category: 'PDs', photo: 'images/people/member-placeholder.svg' },
+  { name: 'Ho Fung Tsoi', role: 'Postdoctoral Researcher', category: 'PDs', photo: 'images/people/ho-fung-tsoi.png' },
   { name: 'Kaito Sugizaki', role: 'Postdoctoral Researcher', category: 'PDs', photo: 'images/people/kaito-sugizaki.png' },
   { name: 'Max Cohen', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/max-cohen.png', link: 'https://www.linkedin.com/in/max-cohen-a677aa215/' },
   { name: 'Sterre Hoogendoorn', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/sterre-hoogendoorn.jpg' },
@@ -21,5 +21,5 @@ window.GROUP_MEMBERS = [
 ];
 
 window.FORMER_MEMBERS = [
-  { name: 'Gwen Gardner', role: 'Ph.D. July 2026' }
+  { name: 'Gwen Gardner', role: 'Ph.D. July 2026', thesis: 'Boosted Higgs Studies in H → WW∗ and the ATLAS TRT in Run 3' }
 ];
