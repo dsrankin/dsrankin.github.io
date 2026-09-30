@@ -301,6 +301,17 @@
             `).join('');
         }
 
+        function renderUndergraduates(members) {
+            const list = document.getElementById('undergrad-list');
+            if (!list) {
+                return;
+            }
+
+            list.innerHTML = members.map(member =>
+                `<li>${escapeAttr(member.name)} (${escapeAttr(member.project)})</li>`
+            ).join('');
+        }
+
         function renderFormerMembers(members) {
             const list = document.getElementById('former-member-list');
             if (!list) {
@@ -507,6 +518,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderLabPhotos(window.LAB_PHOTOS || {});
             renderMembers(window.GROUP_MEMBERS || []);
+            renderUndergraduates(window.UNDERGRADUATES || []);
             renderFormerMembers(window.FORMER_MEMBERS || []);
             renderNewsItems(window.NEWS_ITEMS || []);
             renderHomeNews(window.NEWS_ITEMS || []);
@@ -569,6 +581,8 @@
             <h2>Group Members</h2>
             <!--<p class="small">To update names, roles, and photos, edit <code>people-data.js</code>. Place images in <code>images/people/</code>.</p>-->
             <div id="member-list" class="member-groups"></div>
+            <h3>Undergraduates</h3>
+            <ul id="undergrad-list" class="small"></ul>
             <h3>Former Members</h3>
             <p id="former-member-list" class="small"></p>
         </section>

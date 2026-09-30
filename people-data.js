@@ -20,6 +20,13 @@ window.GROUP_MEMBERS = [
   { name: 'Louis', role: 'Lab Security', category: 'Security', photo: 'images/people/louis.jpg' }
 ];
 
+window.UNDERGRADUATES = [
+  { name: 'Nejat Moges', project: 'Compressed SUSY' },
+  { name: 'Pablo Camargo Tang', project: 'Compressed SUSY' },
+  { name: 'Chenjia Ni', project: 'Lorentz-equivariant network inference on FPGAs' },
+  { name: 'Ammar Aziz', project: 'Agentic analysis' }
+];
+
 window.FORMER_MEMBERS = [
   { name: 'Gwen Gardner', role: 'Ph.D. July 2026', thesis: 'Boosted Higgs Studies in H → WW∗ and the ATLAS TRT in Run 3' }
 ];
