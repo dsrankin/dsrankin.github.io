@@ -220,13 +220,17 @@
         }
 
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            if (Number.isNaN(date.getTime())) {
+            // Parse YYYY-MM-DD / YYYY-MM as local dates; new Date() treats them as UTC,
+            // which shows the previous day in US time zones.
+            const match = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(dateString || '');
+            if (!match) {
                 return dateString;
             }
-            return date.toLocaleDateString(undefined, {
-                year: 'numeric', month: 'short', day: 'numeric'
-            });
+            const [, year, month, day] = match;
+            const date = new Date(Number(year), Number(month) - 1, Number(day || 1));
+            return date.toLocaleDateString(undefined, day
+                ? { year: 'numeric', month: 'short', day: 'numeric' }
+                : { year: 'numeric', month: 'short' });
         }
 
         function normalizePhotoPath(rawPath, fallback = 'images/people/member-placeholder.svg') {
@@ -381,65 +385,8 @@
             }).join('');
         }
 
-        async function fetchArxivFeed(queryUrl) {
-            const encodedQuery = encodeURIComponent(queryUrl);
-            const candidateUrls = [
-                queryUrl,
-                `https://corsproxy.io/?${encodedQuery}`,
-                `https://api.allorigins.win/raw?url=${encodedQuery}`
-            ];
-
-            let lastError = null;
-            for (const url of candidateUrls) {
-                try {
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-
-                    const text = await response.text();
-                    if (!text || text.trim().length === 0) {
-                        throw new Error('Empty response body');
-                    }
-
-                    return text;
-                } catch (error) {
-                    lastError = error;
-                }
-            }
-
-            throw lastError || new Error('No arXiv endpoint could be loaded.');
-        }
-
-        function getXmlText(node, tagName) {
-            return node.getElementsByTagName(tagName)[0]?.textContent?.trim() ||
-                node.getElementsByTagName(`atom:${tagName}`)[0]?.textContent?.trim() ||
-                '';
-        }
-
-        function normalizeArxivEntries(entries) {
-            return entries.map(entry => {
-                const title = getXmlText(entry, 'title').replace(/\s+/g, ' ') || 'Untitled';
-                const published = getXmlText(entry, 'published').slice(0, 10);
-                const link = getXmlText(entry, 'id') || '#';
-                const authorNames = Array.from(entry.getElementsByTagName('name'))
-                    .map(authorNode => authorNode.textContent?.trim())
-                    .filter(Boolean);
-                const authors = authorNames.length > 20
-                    ? `${authorNames.slice(0, 5).join(', ')} et al.`
-                    : authorNames.join(', ');
-
-                return {
-                    title,
-                    published,
-                    link,
-                    authors
-                };
-            });
-        }
-
-        function combineAndSortPapers(arxivPapers = [], manualPapers = []) {
-            const merged = [...arxivPapers, ...manualPapers];
+        function combineAndSortPapers(feedPapers = [], manualPapers = []) {
+            const merged = [...feedPapers, ...manualPapers];
             return merged.sort((a, b) => {
                 const aTime = Date.parse(a.published || '') || 0;
                 const bTime = Date.parse(b.published || '') || 0;
@@ -463,7 +410,7 @@
             }).join('');
         }
 
-        async function loadRecentArxivPapers() {
+        function loadRecentPapers() {
             const list = document.getElementById('papers-list');
             const status = document.getElementById('papers-status');
             const homeList = document.getElementById('home-papers-list');
@@ -472,47 +419,16 @@
                 return;
             }
 
-            status.textContent = 'Loading recent papers from arXiv...';
-            homeStatus.textContent = 'Loading recent papers from arXiv...';
-
-            const query = 'https://export.arxiv.org/api/query?search_query=au:Dylan_Rankin&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending';
-            const manualPapers = window.MANUAL_PAPERS || [];
-
-            try {
-                const xmlText = await fetchArxivFeed(query);
-                const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
-                const parserError = xml.getElementsByTagName('parsererror')[0];
-                if (parserError) {
-                    throw new Error('Could not parse arXiv XML feed.');
-                }
-
-                const entries = Array.from(xml.getElementsByTagName('entry'));
-                const arxivPapers = normalizeArxivEntries(entries);
-                const combinedPapers = combineAndSortPapers(arxivPapers, manualPapers);
-
-                if (combinedPapers.length === 0) {
-                    status.textContent = 'No arXiv papers were returned.';
-                    return;
-                }
-
-                list.innerHTML = renderPaperCards(combinedPapers, 8);
-                homeList.innerHTML = renderPaperCards(combinedPapers, 2);
-
-                status.textContent = 'Showing recent papers.';
-                homeStatus.textContent = 'Showing two latest works.';
-            } catch (error) {
-                if (manualPapers.length > 0) {
-                    const combinedPapers = combineAndSortPapers([], manualPapers);
-                    list.innerHTML = renderPaperCards(combinedPapers, 8);
-                    homeList.innerHTML = renderPaperCards(combinedPapers, 2);
-                    status.innerHTML = 'Unable to load live arXiv results in this browser/session; showing manually maintained papers. You can also use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
-                    homeStatus.innerHTML = 'Unable to load live arXiv results in this browser/session; showing manually maintained papers.';
-                    return;
-                }
-
-                status.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
-                homeStatus.innerHTML = 'Unable to load live arXiv results in this browser/session. You can still use the direct author page: <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
+            // FEED_PAPERS is regenerated daily from INSPIRE by scripts/update_papers.py.
+            const combinedPapers = combineAndSortPapers(window.FEED_PAPERS || [], window.MANUAL_PAPERS || []);
+            if (combinedPapers.length === 0) {
+                status.innerHTML = 'No papers to show. See the <a href="https://arxiv.org/a/rankin_d_1.html" target="_blank" rel="noopener noreferrer">arXiv author listing</a>.';
+                homeStatus.innerHTML = status.innerHTML;
+                return;
             }
+
+            list.innerHTML = renderPaperCards(combinedPapers, 8);
+            homeList.innerHTML = renderPaperCards(combinedPapers, 2);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -522,11 +438,12 @@
             renderFormerMembers(window.FORMER_MEMBERS || []);
             renderNewsItems(window.NEWS_ITEMS || []);
             renderHomeNews(window.NEWS_ITEMS || []);
-            loadRecentArxivPapers();
+            loadRecentPapers();
         });
     </script>
     <script src="people-data.js"></script>
     <script src="papers-data.js"></script>
+    <script src="papers-feed.js"></script>
     <script src="news-items.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -593,7 +510,7 @@
                 <a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a>,
                 <a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a>
             </p>
-            <h2>Recent Papers (auto-loaded from arXiv)</h2>
+            <h2>Recent Papers</h2>
             <p id="papers-status" class="inline-note"></p>
             <ul id="papers-list"></ul>
             <p><a href="documents/DSR_CV.pdf" target="_blank">Download Prof. Rankin's CV</a></p>
