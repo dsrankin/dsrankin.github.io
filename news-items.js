@@ -22,7 +22,7 @@ window.NEWS_ITEMS = [
     details: '',
     tag: 'Press',
     link: 'https://home.cern/smarter-decisions-at-the-speed-of-collisions/',
-    thumb: 'images/news/atlas-cms-trigger.png'
+    thumb: 'images/news/atlas-cms-trigger.jpg'
   },
   {
     date: '2026-03-06',

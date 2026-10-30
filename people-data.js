@@ -2,13 +2,13 @@
 // Place your image files in images/people/ and update the src/photo values below.
 window.LAB_PHOTOS = {
   profile: {
-    src: 'images/people/dylan-rankin.png',
+    src: 'images/people/dylan-rankin.jpg',
     alt: 'Portrait of Prof. Dylan Rankin'
   }
 };
 
 window.GROUP_MEMBERS = [
-  { name: 'Ho Fung Tsoi', role: 'Postdoctoral Researcher', category: 'PDs', photo: 'images/people/ho-fung-tsoi.png' },
+  { name: 'Ho Fung Tsoi', role: 'Postdoctoral Researcher', category: 'PDs', photo: 'images/people/ho-fung-tsoi.jpg' },
   { name: 'Kaito Sugizaki', role: 'Postdoctoral Researcher', category: 'PDs', photo: 'images/people/kaito-sugizaki.png' },
   { name: 'Max Cohen', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/max-cohen.png', link: 'https://www.linkedin.com/in/max-cohen-a677aa215/' },
   { name: 'Sterre Hoogendoorn', role: 'Ph.D. Candidate', category: 'Students', photo: 'images/people/sterre-hoogendoorn.jpg' },

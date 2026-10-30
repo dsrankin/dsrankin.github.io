@@ -10,7 +10,7 @@
     <meta property="og:title" content="Rankin Lab | University of Pennsylvania">
     <meta property="og:description" content="Particle physics at the LHC, real-time triggers, and machine learning for discovery.">
     <meta property="og:url" content="https://dsrankin.github.io/">
-    <meta property="og:image" content="https://dsrankin.github.io/images/event_display.png">
+    <meta property="og:image" content="https://dsrankin.github.io/images/event_display.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16">
@@ -77,7 +77,7 @@
             text-align: center;
             background:
                 linear-gradient(140deg, rgba(1, 31, 91, 0.94), rgba(4, 53, 143, 0.86) 58%, rgba(38, 99, 215, 0.78)),
-                url("images/event_display.png") center / cover no-repeat;
+                url("images/event_display.jpg") center / cover no-repeat;
         }
         header h1 {
             margin: 0;
@@ -407,7 +407,7 @@
         function renderLabPhotos(photos) {
             const piPhoto = document.getElementById('pi-photo');
             if (piPhoto) {
-                piPhoto.src = normalizePhotoPath(photos.profile?.src, 'images/people/dylan-rankin.png');
+                piPhoto.src = normalizePhotoPath(photos.profile?.src, 'images/people/dylan-rankin.jpg');
                 piPhoto.alt = photos.profile?.alt || 'Portrait photo';
             }
         }
@@ -685,7 +685,7 @@
 
             <div class="pi-card">
                 <div class="pi-photo">
-                    <img id="pi-photo" src="images/people/dylan-rankin.png" alt="Portrait of Prof. Dylan Rankin" onerror="this.src='images/people/member-placeholder.svg'">
+                    <img id="pi-photo" src="images/people/dylan-rankin.jpg" alt="Portrait of Prof. Dylan Rankin" onerror="this.src='images/people/member-placeholder.svg'">
                 </div>
                 <div>
                     <h4>Dylan Rankin</h4>
@@ -752,7 +752,7 @@
                     <p>Machine learning is an extremely promising technique for making efficient use of information in latency- and throughput-constrained systems. We are members of the <a href="https://fastmachinelearning.org/" target="_blank" rel="noopener noreferrer">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs.</p>
                 </div>
                 <figure>
-                    <img src="images/news/atlas-cms-trigger.png" alt="Illustration of real-time AI trigger decisions at the LHC" loading="lazy">
+                    <img src="images/news/atlas-cms-trigger.jpg" alt="Illustration of real-time AI trigger decisions at the LHC" loading="lazy">
                     <figcaption>From the CERN feature “Smarter decisions at the speed of collisions”.</figcaption>
                 </figure>
             </div>
