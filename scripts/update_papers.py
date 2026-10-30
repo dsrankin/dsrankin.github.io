@@ -22,6 +22,7 @@ FIELDS = [
     'author_count',
     'arxiv_eprints.value',
     'dois.value',
+    'publication_info',
     'preprint_date',
     'earliest_date',
     'control_number',
@@ -42,6 +43,9 @@ def fetch_records():
 
 
 def format_name(full_name):
+    # INSPIRE lists the PI under several variants (e.g. "Rankin, Dylan Sheldon").
+    if full_name.startswith('Rankin, D'):
+        return 'Dylan Rankin'
     # INSPIRE stores names as "Last, First"; display as "First Last".
     if ', ' in full_name:
         last, first = full_name.split(', ', 1)
@@ -67,7 +71,31 @@ def normalize(record):
     else:
         authors = ', '.join(names)
 
-    return {'title': title, 'published': published, 'link': link, 'authors': authors}
+    return {
+        'title': title,
+        'published': published,
+        'link': link,
+        'authors': authors,
+        'authorCount': meta.get('author_count', len(names)),
+        'journal': format_journal(meta.get('publication_info', [])),
+    }
+
+
+def format_journal(publication_info):
+    # e.g. "SciPost Phys. 21, 053 (2026)"; empty for preprints and proceedings.
+    for info in publication_info:
+        if not info.get('journal_title'):
+            continue
+        ref = info['journal_title']
+        if info.get('journal_volume'):
+            ref += f" {info['journal_volume']}"
+        article = info.get('artid') or info.get('page_start')
+        if article:
+            ref += f', {article}'
+        if info.get('year'):
+            ref += f" ({info['year']})"
+        return ref
+    return ''
 
 
 def main():

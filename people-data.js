@@ -3,11 +3,7 @@
 window.LAB_PHOTOS = {
   profile: {
     src: 'images/people/dylan-rankin.png',
-    alt: 'Portrait of Prof. Rankin'
-  },
-  group: {
-    src: 'images/people/group-photo.svg',
-    alt: 'Rankin Lab group photo'
+    alt: 'Portrait of Prof. Dylan Rankin'
   }
 };
 
@@ -28,5 +24,5 @@ window.UNDERGRADUATES = [
 ];
 
 window.FORMER_MEMBERS = [
-  { name: 'Gwen Gardner', role: 'Ph.D. July 2026', thesis: 'Boosted Higgs Studies in H → WW∗ and the ATLAS TRT in Run 3' }
+  { name: 'Gwen Gardner', role: 'Ph.D. July 2026', thesis: 'Boosted Higgs Studies in H → WW∗ and the ATLAS TRT in Run 3', now: 'Postdoc, University of Geneva' }
 ];

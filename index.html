@@ -3,233 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rankin Lab - UPenn</title>
+    <title>Rankin Lab | University of Pennsylvania</title>
+    <meta name="description" content="The Rankin Lab at the University of Pennsylvania studies proton-proton collisions at the CERN Large Hadron Collider and develops machine learning and real-time trigger systems for particle physics.">
+    <link rel="canonical" href="https://dsrankin.github.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Rankin Lab | University of Pennsylvania">
+    <meta property="og:description" content="Particle physics at the LHC, real-time triggers, and machine learning for discovery.">
+    <meta property="og:url" content="https://dsrankin.github.io/">
+    <meta property="og:image" content="https://dsrankin.github.io/images/event_display.png">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
+        :root {
+            color-scheme: dark;
+            --penn-blue: #011f5b;
+            --penn-blue-mid: #04358f;
+            --penn-blue-light: #2663d7;
+            --penn-red: #990000;
+            --ink: #dde4f2;
+            --muted: #98a4bd;
+            --heading: #f2f5fc;
+            --link: #8fb4ff;
+            --link-hover: #ff9b9b;
+            --accent: #e0565b;
+            --bg: #0a101d;
+            --card: #121b2d;
+            --border: #233050;
+            --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            --radius: 12px;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.65;
             margin: 0;
-            padding: 0;
-            color: #12213d;
-            background-image:
-                linear-gradient(rgba(245, 248, 255, 0.8), rgba(231, 237, 248, 0.8)),
-                url("images/event_display.png");
-            background-position: center;
-            background-size: cover;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
+            color: var(--ink);
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        footer {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.85);
-            text-align: center;
-            border-top: 1px solid #d6ddee;
-        }
-        header {
+        a { color: var(--link); text-underline-offset: 2px; }
+        a:hover { color: var(--link-hover); }
+        h2, h3 { line-height: 1.3; color: var(--heading); }
+        h2 { font-size: 1.6rem; margin: 0 0 16px; }
+        h3 {
+            font-size: 1.15rem;
+            margin: 36px 0 14px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--border);
             position: relative;
-            color: white;
-            text-align: center;
-            padding: 40px 0 30px;
-            background: linear-gradient(140deg, #011f5b, #04358f 58%, #2663d7 100%);
-            box-shadow: 0 8px 20px rgba(1, 31, 91, 0.35);
         }
-        .banner-headshot {
+        h3::after {
+            content: '';
             position: absolute;
-            top: 16px;
-            right: 18px;
-            width: 108px;
-            aspect-ratio: 1 / 1;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.92);
-            box-shadow: 0 10px 20px rgba(2, 16, 48, 0.4);
-            background: rgba(255, 255, 255, 0.18);
+            left: 0;
+            bottom: -2px;
+            width: 48px;
+            height: 2px;
+            background: var(--accent);
         }
-        .banner-headshot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+
+        /* Header and navigation */
+        header {
+            color: #fff;
+            padding: 56px 24px 48px;
+            text-align: center;
+            background:
+                linear-gradient(140deg, rgba(1, 31, 91, 0.94), rgba(4, 53, 143, 0.86) 58%, rgba(38, 99, 215, 0.78)),
+                url("images/event_display.png") center / cover no-repeat;
         }
-        .container {
-            width: min(900px, 90%);
-            margin: 24px auto 0;
-            padding: 28px;
-            background: rgba(255, 255, 255, 0.88);
-            border-radius: 16px;
-            box-shadow: 0 14px 34px rgba(26, 46, 96, 0.14);
-            backdrop-filter: blur(2px);
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        header p {
+            margin: 8px 0 0;
+            font-size: clamp(1rem, 2.6vw, 1.2rem);
+            opacity: 0.9;
         }
         nav {
-            margin-top: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(10, 16, 29, 0.92);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0 auto;
+            padding: 0 16px;
+            max-width: 1040px;
             display: flex;
             justify-content: center;
+            gap: 4px;
+            overflow-x: auto;
         }
-        nav ul { list-style: none; padding: 0; }
-        nav ul li { display: inline; margin: 0 6px; }
         nav a {
-            display: inline-block;
+            display: block;
+            padding: 14px 16px 12px;
+            color: var(--muted);
+            font-weight: 500;
             text-decoration: none;
-            color: #f3f6ff;
-            background: rgba(1, 31, 91, 0.38);
-            border-radius: 999px;
-            padding: 8px 16px;
-            transition: transform 0.2s ease, background 0.2s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
         }
-        nav a:hover, nav a:focus-visible {
-            background: rgba(1, 31, 91, 0.52);
-            transform: translateY(-1px);
-        }
+        nav a:hover, nav a:focus-visible { color: var(--heading); }
         nav a.active-tab {
-            background: #ffffff;
-            color: #002f85;
-            font-weight: 700;
+            color: var(--heading);
+            font-weight: 600;
+            border-bottom-color: var(--accent);
+        }
+
+        main {
+            flex: 1;
+            width: min(1040px, 100%);
+            margin: 0 auto;
+            padding: 36px 24px 48px;
         }
         section { display: none; }
         section.active { display: block; }
-        .member-groups {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .lead { font-size: 1.1rem; }
+
+        /* Shared card look */
+        .card, .member, .news-card, .paper-card, .home-news-card, .pi-card, .theme {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
         }
+        .meta, .news-date, .paper-meta {
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+        .tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-right: 8px;
+        }
+        .pill-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+        .pill-links a {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.88rem;
+            text-decoration: none;
+            background: var(--bg);
+        }
+        .pill-links a:hover { border-color: var(--link); }
+        .more-link { font-weight: 500; }
+
+        /* PI card */
+        .pi-card {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            padding: 22px;
+            margin: 24px 0 8px;
+        }
+        .pi-photo {
+            flex: 0 0 128px;
+            width: 128px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--border);
+        }
+        .pi-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pi-card h4 { margin: 0; font-size: 1.15rem; color: var(--heading); }
+        .pi-card p { margin: 4px 0; }
+        address { font-style: normal; }
+
+        /* Research themes */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        a.theme {
+            display: block;
+            padding: 18px;
+            color: inherit;
+            text-decoration: none;
+            border-top: 3px solid var(--penn-blue-light);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        a.theme:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45); }
+        a.theme strong { display: block; color: var(--heading); margin-bottom: 4px; }
+        a.theme span { font-size: 0.92rem; color: var(--muted); }
+        .research-theme {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+            align-items: start;
+        }
+        .research-theme.no-figure { grid-template-columns: 1fr; }
+        .research-theme figure { margin: 6px 0 0; }
+        .research-theme figure img {
+            width: 100%;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            display: block;
+        }
+        .research-theme figcaption { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+
+        /* People */
+        .member-groups { display: flex; flex-direction: column; gap: 12px; }
+        .member-group h4 { margin: 0 0 12px; color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .member-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 18px;
         }
-        .member-group {
-            margin-bottom: 28px;
-        }
+        .member-group { margin-bottom: 20px; }
         .member {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 14px 10px;
-            box-shadow: 0 8px 16px rgba(11, 39, 87, 0.1);
-            border: 1px solid #e9eef9;
+            padding: 18px 10px 14px;
         }
         .member p { margin: 0; }
-        .member p:first-of-type { font-weight: bold; }
-        .member p:last-of-type { margin-top: 4px; font-size: 0.9em; }
-        .member img {
-            border-radius: 50%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .member p:first-of-type { font-weight: 600; }
+        .member p:last-of-type { margin-top: 2px; font-size: 0.88rem; color: var(--muted); }
         .member-photo {
             width: 112px;
             aspect-ratio: 1 / 1;
             overflow: hidden;
             border-radius: 50%;
             margin-bottom: 10px;
-            border: 2px solid #eef3ff;
+            border: 3px solid var(--border);
         }
-        .lab-photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-            margin: 14px 0 20px;
-        }
-        .lab-photo {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #e4e9f5;
-            box-shadow: 0 8px 18px rgba(20, 48, 100, 0.08);
-        }
-        .lab-photo img {
-            width: 100%;
-            aspect-ratio: 4 / 3;
-            object-fit: cover;
-            display: block;
-        }
-        .lab-photo figcaption {
-            padding: 8px 10px;
-            font-size: 0.9em;
-            color: #334;
-        }
+        .member-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .plain-list { padding-left: 20px; }
+        .plain-list li { margin: 4px 0; }
+
+        /* News */
         .home-news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 16px;
-            margin: 14px 0 20px;
         }
-        .home-news-card {
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #e4e9f5;
-            box-shadow: 0 8px 18px rgba(20, 48, 100, 0.08);
-        }
-        .home-news-card img {
+        .home-news-card { overflow: hidden; display: flex; flex-direction: column; }
+        .home-news-card img, .news-thumb-placeholder {
             width: 100%;
             aspect-ratio: 16 / 9;
             object-fit: cover;
             display: block;
         }
-        .home-news-body {
-            padding: 10px 14px;
+        .news-thumb-placeholder {
+            display: flex;
+            align-items: flex-end;
+            padding: 14px;
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            background: linear-gradient(140deg, var(--penn-blue), var(--penn-blue-light));
         }
-        .home-news-body p { margin: 0; }
-        .news-card, .paper-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin: 12px 0;
-            border: 1px solid #e4e9f5;
-            box-shadow: 0 8px 18px rgba(20, 48, 100, 0.08);
+        .news-thumb-placeholder.tag-award { background: linear-gradient(140deg, #5c0000, var(--penn-red)); }
+        .news-thumb-placeholder.tag-people { background: linear-gradient(140deg, #04358f, #0f7b8a); }
+        .home-news-body { padding: 12px 16px 14px; }
+        .home-news-body p { margin: 2px 0 0; }
+        .news-card, .paper-card { padding: 14px 18px; margin: 12px 0; }
+        .news-card p { margin: 4px 0 0; }
+        .news-card .small { color: var(--muted); }
+
+        /* Papers */
+        .paper-list { list-style: none; padding: 0; margin: 0; }
+        .paper-card a.paper-title { font-weight: 600; text-decoration: none; }
+        .paper-card a.paper-title:hover { text-decoration: underline; }
+        .paper-meta { margin-top: 4px; }
+        .paper-meta strong { color: var(--ink); font-weight: 600; }
+        .journal { font-style: italic; }
+
+        .callout {
+            margin-top: 36px;
+            padding: 20px 22px;
+            border-radius: var(--radius);
+            background: linear-gradient(140deg, rgba(38, 99, 215, 0.14), rgba(224, 86, 91, 0.08));
+            border-left: 4px solid var(--accent);
         }
-        .news-date, .paper-meta {
-            color: #555;
-            font-size: 0.9em;
-        }
+        .callout h3 { margin-top: 0; border: none; padding: 0; }
+        .callout h3::after { display: none; }
+        .callout p:last-child { margin-bottom: 0; }
+        .callout p { text-wrap: pretty; }
+
         .inline-note {
             font-size: 0.95em;
-            color: #333;
-            background: #fff8dc;
+            background: #2a2410;
             padding: 8px 10px;
             border-left: 4px solid #c9a227;
         }
-        .inline-note:empty {
-            display: none;
+        .inline-note:empty { display: none; }
+        .small { font-size: 0.9em; }
+
+        footer {
+            background: #060a14;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 28px 24px;
         }
-        .small {
-            font-size: 0.9em;
-            color: #333;
+        footer .footer-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px 32px;
         }
-        code { background-color: #efefef; padding: 0 4px; border-radius: 4px; }
+        footer p { margin: 2px 0; }
+        footer a { color: var(--ink); }
+        footer a:hover { color: var(--link-hover); }
+
+        @media (max-width: 720px) {
+            header { padding: 36px 16px 30px; }
+            main { padding: 24px 16px 36px; }
+            nav ul { justify-content: flex-start; }
+            nav a { padding: 12px 10px 10px; }
+            .pi-card { flex-direction: column; text-align: center; }
+            .pi-card .pill-links { justify-content: center; }
+            .research-theme { grid-template-columns: 1fr; }
+            .news-thumb-placeholder { aspect-ratio: 4 / 1; }
+        }
     </style>
     <script>
-        function showTab(tabId, event) {
-            if (event) {
-                event.preventDefault();
-            }
-            document.querySelectorAll('section').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+        const TABS = ['home', 'members', 'research', 'news'];
+        // Old links used #papers for the Research tab.
+        const TAB_ALIASES = { papers: 'research' };
 
-            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active-tab'));
-            const activeLink = document.querySelector(`nav a[data-tab="${tabId}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active-tab');
-            }
+        function showTab(tabId) {
+            // Section ids are "tab-<name>" so the browser doesn't also jump to them on #<name>.
+            document.querySelectorAll('main > section').forEach(tab => {
+                tab.classList.toggle('active', tab.id === `tab-${tabId}`);
+            });
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.toggle('active-tab', link.dataset.tab === tabId);
+            });
+        }
+
+        function routeFromHash() {
+            const requested = decodeURIComponent(location.hash.slice(1));
+            const tabId = TAB_ALIASES[requested] || requested;
+            showTab(TABS.includes(tabId) ? tabId : 'home');
+            window.scrollTo(0, 0);
         }
 
         function formatDate(dateString) {
-            // Parse YYYY-MM-DD / YYYY-MM as local dates; new Date() treats them as UTC,
+            // Parse YYYY-MM-DD / YYYY-MM / YYYY as local dates; new Date() treats them as UTC,
             // which shows the previous day in US time zones.
-            const match = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(dateString || '');
+            const match = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(dateString || '');
             if (!match) {
                 return dateString;
             }
             const [, year, month, day] = match;
+            if (!month) {
+                return year;
+            }
             const date = new Date(Number(year), Number(month) - 1, Number(day || 1));
             return date.toLocaleDateString(undefined, day
                 ? { year: 'numeric', month: 'short', day: 'numeric' }
@@ -258,16 +405,10 @@
         }
 
         function renderLabPhotos(photos) {
-            const bannerHeadshot = document.getElementById('banner-headshot');
-            if (bannerHeadshot) {
-                bannerHeadshot.src = normalizePhotoPath(photos.profile?.src, 'images/people/dylan-rankin.png');
-                bannerHeadshot.alt = photos.profile?.alt || 'Portrait photo';
-            }
-
-            const groupPhoto = document.getElementById('group-photo');
-            if (groupPhoto) {
-                groupPhoto.src = normalizePhotoPath(photos.group?.src, 'images/people/group-photo.svg');
-                groupPhoto.alt = photos.group?.alt || 'Group photo';
+            const piPhoto = document.getElementById('pi-photo');
+            if (piPhoto) {
+                piPhoto.src = normalizePhotoPath(photos.profile?.src, 'images/people/dylan-rankin.png');
+                piPhoto.alt = photos.profile?.alt || 'Portrait photo';
             }
         }
 
@@ -277,11 +418,11 @@
                 return;
             }
 
-            const categories = ['PDs', 'Students', 'Security'];
-            const membersByCategory = categories.reduce((grouped, category) => {
-                grouped[category] = members.filter(member => member.category === category);
-                return grouped;
-            }, {});
+            const categories = [
+                { key: 'PDs', label: 'Postdoctoral Researchers' },
+                { key: 'Students', label: 'Graduate Students' },
+                { key: 'Security', label: 'Lab Security' }
+            ];
 
             const renderMemberCard = (member) => {
                 const photoSrc = normalizePhotoPath(member.photo);
@@ -291,7 +432,7 @@
                 return `
                     <article class="member">
                         <div class="member-photo">
-                            <img src="${photoSrc}" alt="${member.name}" onerror="this.src='images/people/member-placeholder.svg'">
+                            <img src="${photoSrc}" alt="${escapeAttr(member.name)}" loading="lazy" onerror="this.src='images/people/member-placeholder.svg'">
                         </div>
                         <p>${nameHtml}</p>
                         <p>${member.role}</p>
@@ -299,13 +440,20 @@
                 `;
             };
 
-            list.innerHTML = categories.map(category => `
-                <div class="member-group">
-                    <div class="member-list">
-                        ${membersByCategory[category].map(renderMemberCard).join('')}
+            list.innerHTML = categories.map(({ key, label }) => {
+                const groupMembers = members.filter(member => member.category === key);
+                if (groupMembers.length === 0) {
+                    return '';
+                }
+                return `
+                    <div class="member-group">
+                        <h4>${label}</h4>
+                        <div class="member-list">
+                            ${groupMembers.map(renderMemberCard).join('')}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function renderUndergraduates(members) {
@@ -315,7 +463,7 @@
             }
 
             list.innerHTML = members.map(member =>
-                `<li>${escapeAttr(member.name)} (${escapeAttr(member.project)})</li>`
+                `<li>${escapeHtml(member.name)} <span class="meta">(${escapeHtml(member.project)})</span></li>`
             ).join('');
         }
 
@@ -326,13 +474,22 @@
             }
 
             list.innerHTML = members.map(member => {
-                const base = `${escapeAttr(member.name)} (${escapeAttr(member.role)})`;
-                return member.thesis ? `${base}, <em>${escapeAttr(member.thesis)}</em>` : base;
-            }).join(', ');
+                const base = `${escapeHtml(member.name)} <span class="meta">(${escapeHtml(member.role)})</span>`;
+                const withThesis = member.thesis ? `${base}, <em>${escapeHtml(member.thesis)}</em>` : base;
+                return `<li>${withThesis}${member.now ? `<br><span class="meta">Now: ${escapeHtml(member.now)}</span>` : ''}</li>`;
+            }).join('');
         }
 
         function escapeAttr(value) {
             return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         function sortNewsItems(items) {
@@ -343,49 +500,81 @@
             });
         }
 
+        function renderNewsTitle(item) {
+            return item.link
+                ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
+                : item.title;
+        }
+
         function renderNewsItems(items) {
             const list = document.getElementById('news-list');
             if (!list) {
                 return;
             }
 
-            list.innerHTML = sortNewsItems(items).map(item => {
-                const title = item.link
-                    ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
-                    : item.title;
-                return `
-                    <article class="news-card">
-                        <div class="news-date">${formatDate(item.date)}</div>
-                        <p>${title}</p>
-                        ${item.details ? `<p class="small">${item.details}</p>` : ''}
-                    </article>
-                `;
-            }).join('');
+            list.innerHTML = sortNewsItems(items).map(item => `
+                <article class="news-card">
+                    <div class="news-date">${item.tag ? `<span class="tag">${item.tag}</span>` : ''}${formatDate(item.date)}</div>
+                    <p>${renderNewsTitle(item)}</p>
+                    ${item.details ? `<p class="small">${item.details}</p>` : ''}
+                </article>
+            `).join('');
         }
 
-        function renderHomeNews(items, limit = 2) {
+        function renderHomeNews(items, limit = 3) {
             const list = document.getElementById('home-news-list');
             if (!list) {
                 return;
             }
 
-            list.innerHTML = sortNewsItems(items).slice(0, limit).map(item => {
-                const titleHtml = item.link
-                    ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>`
-                    : item.title;
+            // Show at most one paper card so awards, people and press stay visible.
+            let paperShown = false;
+            const homeItems = sortNewsItems(items).filter(item => {
+                if (item.tag !== 'Paper') {
+                    return true;
+                }
+                if (paperShown) {
+                    return false;
+                }
+                paperShown = true;
+                return true;
+            });
+
+            list.innerHTML = homeItems.slice(0, limit).map(item => {
+                const tagClass = item.tag ? `tag-${item.tag.toLowerCase()}` : '';
                 const thumbHtml = item.thumb
-                    ? `<img src="${encodeURI(item.thumb)}" alt="${escapeAttr(item.title)}">`
-                    : '';
+                    ? `<img src="${encodeURI(item.thumb)}" alt="${escapeAttr(item.title)}" loading="lazy">`
+                    : `<div class="news-thumb-placeholder ${tagClass}" aria-hidden="true">${item.tag || 'News'}</div>`;
                 return `
                     <article class="home-news-card">
                         ${thumbHtml}
                         <div class="home-news-body">
-                            <div class="news-date">${formatDate(item.date)}</div>
-                            <p>${titleHtml}</p>
+                            <div class="news-date">${item.tag && item.thumb ? `<span class="tag">${item.tag}</span>` : ''}${formatDate(item.date)}</div>
+                            <p>${renderNewsTitle(item)}</p>
                         </div>
                     </article>
                 `;
             }).join('');
+        }
+
+        // Recent small-author papers from the feed become "Paper" news items automatically.
+        const PAPER_NEWS_MAX_AUTHORS = 20;
+        const PAPER_NEWS_MAX_AGE_MONTHS = 6;
+
+        function paperNewsItems(papers) {
+            const cutoff = new Date();
+            cutoff.setMonth(cutoff.getMonth() - PAPER_NEWS_MAX_AGE_MONTHS);
+            const groupNames = getGroupNames();
+            return papers
+                .filter(paper => paper.authorCount && paper.authorCount <= PAPER_NEWS_MAX_AUTHORS)
+                .filter(paper => (Date.parse(paper.published || '') || 0) >= cutoff.getTime())
+                .map(paper => ({
+                    date: paper.published,
+                    tag: 'Paper',
+                    title: `New paper: ${escapeHtml(paper.title)}`,
+                    details: renderAuthors(paper.authors || '', groupNames),
+                    link: paper.link
+                }));
         }
 
         function combineAndSortPapers(feedPapers = [], manualPapers = []) {
@@ -397,17 +586,38 @@
             });
         }
 
+        function getGroupNames() {
+            const people = [
+                ...(window.GROUP_MEMBERS || []),
+                ...(window.UNDERGRADUATES || []),
+                ...(window.FORMER_MEMBERS || [])
+            ];
+            return new Set(['Dylan Rankin', ...people.map(person => person.name)]);
+        }
+
+        function renderAuthors(authors, groupNames) {
+            // Bold current and former group members in author lists.
+            return authors.split(', ').map(name => {
+                const etAl = name.endsWith(' et al.');
+                const bareName = etAl ? name.slice(0, -' et al.'.length) : name;
+                const html = groupNames.has(bareName)
+                    ? `<strong>${escapeHtml(bareName)}</strong>`
+                    : escapeHtml(bareName);
+                return etAl ? `${html} et al.` : html;
+            }).join(', ');
+        }
+
         function renderPaperCards(entries, limit) {
+            const groupNames = getGroupNames();
             return entries.slice(0, limit).map(entry => {
-                const title = (entry.title || 'Untitled').replace(/\s+/g, ' ');
-                const published = entry.published || '';
+                const title = escapeHtml((entry.title || 'Untitled').replace(/\s+/g, ' '));
                 const link = entry.link || '#';
-                const authors = entry.authors || '';
 
                 return `
                     <li class="paper-card">
-                        <a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a>
-                        <div class="paper-meta">${formatDate(published)}${authors ? ` • ${authors}` : ''}</div>
+                        <a class="paper-title" href="${link}" target="_blank" rel="noopener noreferrer">${title}</a>
+                        <div class="paper-meta">${formatDate(entry.published || '')}${entry.authors ? ` · ${renderAuthors(entry.authors, groupNames)}` : ''}</div>
+                        ${entry.journal ? `<div class="paper-meta journal">${escapeHtml(entry.journal)}</div>` : ''}
                     </li>
                 `;
             }).join('');
@@ -430,103 +640,178 @@
                 return;
             }
 
-            list.innerHTML = renderPaperCards(combinedPapers, 8);
-            homeList.innerHTML = renderPaperCards(combinedPapers, 2);
+            list.innerHTML = renderPaperCards(combinedPapers, 10);
+            homeList.innerHTML = renderPaperCards(combinedPapers, 3);
         }
 
+        window.addEventListener('hashchange', routeFromHash);
         window.addEventListener('DOMContentLoaded', () => {
+            routeFromHash();
             renderLabPhotos(window.LAB_PHOTOS || {});
             renderMembers(window.GROUP_MEMBERS || []);
             renderUndergraduates(window.UNDERGRADUATES || []);
             renderFormerMembers(window.FORMER_MEMBERS || []);
-            renderNewsItems(window.NEWS_ITEMS || []);
-            renderHomeNews(window.NEWS_ITEMS || []);
+            const newsItems = [...(window.NEWS_ITEMS || []), ...paperNewsItems(window.FEED_PAPERS || [])];
+            renderNewsItems(newsItems);
+            renderHomeNews(newsItems);
             loadRecentPapers();
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
         });
     </script>
     <script src="people-data.js"></script>
     <script src="papers-data.js"></script>
     <script src="papers-feed.js"></script>
     <script src="news-items.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
-        <div class="banner-headshot">
-            <img id="banner-headshot" src="images/people/dylan-rankin.png" alt="Portrait of Prof. Rankin" onerror="this.src='images/people/member-placeholder.svg'">
-        </div>
         <h1>Rankin Lab</h1>
-        <h2>University of Pennsylvania, Department of Physics and Astronomy</h2>
+        <p>University of Pennsylvania · Department of Physics and Astronomy</p>
     </header>
 
-    <nav>
+    <nav aria-label="Main">
         <ul>
-            <li><a href="#" class="active-tab" data-tab="home" onclick="showTab('home', event)">Home</a></li>
-            <li><a href="#" data-tab="members" onclick="showTab('members', event)">Group Members</a></li>
-            <li><a href="#" data-tab="papers" onclick="showTab('papers', event)">Research</a></li>
-            <li><a href="#" data-tab="news" onclick="showTab('news', event)">News</a></li>
+            <li><a href="#home" data-tab="home">Home</a></li>
+            <li><a href="#research" data-tab="research">Research</a></li>
+            <li><a href="#members" data-tab="members">Group Members</a></li>
+            <li><a href="#news" data-tab="news">News</a></li>
         </ul>
     </nav>
 
-    <div class="container">
-        <section id="home" class="active">
+    <main>
+        <section id="tab-home" class="active">
             <h2>Welcome to the Rankin Lab</h2>
-<!--
-            <div class="lab-photo-grid">
-                <figure class="lab-photo">
-                    <img id="profile-photo" src="images/people/your-photo.svg" alt="Portrait photo">
-                    <figcaption>Your photo (replace in <code>people-data.js</code>)</figcaption>
-                </figure>
-                <figure class="lab-photo">
-                    <img id="group-photo" src="images/people/group-photo.svg" alt="Group photo">
-                    <figcaption>Group photo (replace in <code>people-data.js</code>)</figcaption>
-                </figure>
-            </div>
--->
+            <p class="lead">We use proton-proton collisions at the CERN Large Hadron Collider (LHC) to test our understanding of the Standard Model of particle physics, and we build the machine learning and real-time trigger systems needed to get the most physics out of LHC data.</p>
 
-            <p>My primary research uses data from proton-proton collisions at the CERN Large Hadron Collider (LHC) to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics as well as precision measurements of known particles, particularly in the highly boosted regime. As part of this research I make use of machine learning (ML) for an array of tasks, including jet classification, mass regression, and event reconstruction. I see ML as an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. My recent interests in ML are focused on anomaly detection and self-supervised learning.</p>
-            <p>My research is also focused on trigger and data acquisition systems at the LHC. The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. My research aims to understand how best to utilize this hardware to maximize the physics that can be done. I see ML as an extremely promising technique for making efficient use of information in latency/throughput-constrained systems. I am a member of the FastML collaboration <a href="https://fastmachinelearning.org/" target="_blank">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs. I am also generally interested in the use of ML across scientific disciplines, particularly in similar cases where model size and latency are constrained.</p>
-            <p>My research group is involved in all aspects of this work. While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
-            <p><a href="#" onclick="showTab('papers', event)">Go to the Research tab for a more complete publications list.</a></p>
+            <div class="pi-card">
+                <div class="pi-photo">
+                    <img id="pi-photo" src="images/people/dylan-rankin.png" alt="Portrait of Prof. Dylan Rankin" onerror="this.src='images/people/member-placeholder.svg'">
+                </div>
+                <div>
+                    <h4>Dylan Rankin</h4>
+                    <p>Assistant Professor, Department of Physics and Astronomy</p>
+                    <ul class="pill-links">
+                        <li><a href="documents/DSR_CV.pdf" target="_blank" rel="noopener">CV (PDF)</a></li>
+                        <li><a href="https://inspirehep.net/authors/1246648" target="_blank" rel="noopener noreferrer">INSPIRE</a></li>
+                        <li><a href="https://arxiv.org/a/rankin_d_1" target="_blank" rel="noopener noreferrer">arXiv</a></li>
+                        <li><a href="https://orcid.org/0000-0001-8411-9620" target="_blank" rel="noopener noreferrer">ORCID</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Research</h3>
+            <div class="theme-grid">
+                <a class="theme" href="#research">
+                    <strong>Physics at the LHC</strong>
+                    <span>Searches for new physics and precision measurements, especially in the highly boosted regime.</span>
+                </a>
+                <a class="theme" href="#research">
+                    <strong>Real-time triggers</strong>
+                    <span>Deciding which of 40 million collisions per second to keep, from FPGAs to GPUs.</span>
+                </a>
+                <a class="theme" href="#research">
+                    <strong>Machine learning for discovery</strong>
+                    <span>Anomaly detection, self-supervised learning, and fast ML inference.</span>
+                </a>
+            </div>
+
             <h3>Latest News</h3>
             <div id="home-news-list" class="home-news-grid"></div>
-            <p><a href="#" onclick="showTab('news', event)">Go to the News tab for more.</a></p>
-            <h3>Latest Work</h3>
+            <p><a class="more-link" href="#news">All news →</a></p>
+
+            <h3>Latest Papers</h3>
             <p id="home-papers-status" class="inline-note"></p>
-            <ul id="home-papers-list"></ul>
+            <ul id="home-papers-list" class="paper-list"></ul>
+            <p><a class="more-link" href="#research">All recent papers →</a></p>
 
+            <div class="callout">
+                <h3>Join the group</h3>
+                <p>If you are a student or postdoc interested in collider physics, real-time systems, or machine learning, <a href="#members">see how to get&nbsp;involved&nbsp;→</a></p>
+            </div>
         </section>
 
-        <section id="members">
-            <h2>Group Members</h2>
-            <!--<p class="small">To update names, roles, and photos, edit <code>people-data.js</code>. Place images in <code>images/people/</code>.</p>-->
-            <div id="member-list" class="member-groups"></div>
-            <h3>Undergraduates</h3>
-            <ul id="undergrad-list" class="small"></ul>
-            <h3>Former Members</h3>
-            <p id="former-member-list" class="small"></p>
-        </section>
+        <section id="tab-research">
+            <h2>Research</h2>
+            <p class="lead">While our focus is on the Large Hadron Collider, many of the tools and techniques we use are broadly applicable across high energy physics and beyond.</p>
 
-        <section id="papers">
-            <p>See also:
-                <a href="https://inspirehep.net/authors/1246648" target="_blank"><i class="fas fa-book"></i> INSPIRE</a>,
-                <a href="http://arxiv.org/a/rankin_d_1" target="_blank"><i class="fas fa-file-alt"></i> arXiv</a>,
-                <a href="https://orcid.org/0000-0001-8411-9620" target="_blank"><i class="fab fa-orcid"></i> ORCiD</a>
-            </p>
-            <h2>Recent Papers</h2>
+            <h3>Physics at the LHC</h3>
+            <div class="research-theme">
+                <div>
+                    <p>We use data from proton-proton collisions at the LHC to probe our understanding of the Standard Model of particle physics. This consists of both direct searches for new physics, such as searches for higgsinos in compressed mass spectra, and precision measurements of known particles, particularly in the highly boosted regime.</p>
+                </div>
+                <figure>
+                    <img src="images/news/atlas-higgsino-susy.jpg" alt="Exclusion limits from the ATLAS compressed higgsino search" loading="lazy">
+                    <figcaption>Limits from the ATLAS search for higgsinos in compressed mass spectra.</figcaption>
+                </figure>
+            </div>
+
+            <h3>Real-time triggers</h3>
+            <div class="research-theme">
+                <div>
+                    <p>The LHC collides protons at a rate of 40 million events per second, but the information from each event cannot be stored, due both to bandwidth and overall storage limitations. Instead, the trigger system must analyze each event rapidly and determine if the event should be saved or discarded forever. This is done in multiple stages, on hardware from custom electronics to field programmable gate arrays (FPGAs) to commercial CPUs to GPUs. We aim to understand how best to use this hardware to maximize the physics that can be done.</p>
+                    <p>Machine learning is an extremely promising technique for making efficient use of information in latency- and throughput-constrained systems. We are members of the <a href="https://fastmachinelearning.org/" target="_blank" rel="noopener noreferrer">FastML collaboration</a>, which focuses on problems in this space and supports the hls4ml tool for low-latency ML inference on FPGAs.</p>
+                </div>
+                <figure>
+                    <img src="images/news/atlas-cms-trigger.png" alt="Illustration of real-time AI trigger decisions at the LHC" loading="lazy">
+                    <figcaption>From the CERN feature “Smarter decisions at the speed of collisions”.</figcaption>
+                </figure>
+            </div>
+
+            <h3>Machine learning for discovery</h3>
+            <div class="research-theme no-figure">
+                <div>
+                    <p>Machine learning is an important tool for making the most of the enormous volume of data we have collected (and will collect) at the LHC, especially as we begin to study more complex processes with subtle signatures. We use ML for an array of tasks, including jet classification, mass regression, and event reconstruction, and our recent work focuses on anomaly detection and self-supervised learning. We are also interested in the use of ML across scientific disciplines, particularly where model size and latency are constrained.</p>
+                </div>
+            </div>
+
+            <h3>Recent Papers</h3>
+            <ul class="pill-links">
+                <li><a href="https://inspirehep.net/authors/1246648" target="_blank" rel="noopener noreferrer">INSPIRE</a></li>
+                <li><a href="https://arxiv.org/a/rankin_d_1" target="_blank" rel="noopener noreferrer">arXiv</a></li>
+                <li><a href="https://orcid.org/0000-0001-8411-9620" target="_blank" rel="noopener noreferrer">ORCID</a></li>
+                <li><a href="documents/DSR_CV.pdf" target="_blank" rel="noopener">CV (PDF)</a></li>
+            </ul>
             <p id="papers-status" class="inline-note"></p>
-            <ul id="papers-list"></ul>
-            <p><a href="documents/DSR_CV.pdf" target="_blank">Download Prof. Rankin's CV</a></p>
+            <ul id="papers-list" class="paper-list"></ul>
+            <p class="meta">Updated daily from INSPIRE-HEP. Group members in bold. Large-collaboration papers are not listed; see INSPIRE for the full record.</p>
         </section>
 
-        <section id="news">
+        <section id="tab-members">
+            <h2>Group Members</h2>
+            <div id="member-list" class="member-groups"></div>
+            <h3>Current Undergraduates</h3>
+            <ul id="undergrad-list" class="plain-list"></ul>
+            <h3>Former Members</h3>
+            <ul id="former-member-list" class="plain-list"></ul>
+
+            <div class="callout">
+                <h3>Join the group</h3>
+                <p><strong>Prospective graduate students:</strong> apply to the <a href="https://www.physics.upenn.edu/" target="_blank" rel="noopener noreferrer">Penn Department of Physics and Astronomy</a> Ph.D. program and mention your interest in the group. You are welcome to email ahead of time to discuss research directions.</p>
+                <p><strong>Penn undergraduates:</strong> email a short note describing your interests and any relevant coursework or programming experience.</p>
+                <p><strong>Postdocs:</strong> open positions are advertised when available.</p>
+                <p>Contact: <a href="mailto:dsrankin@sas.upenn.edu">dsrankin@sas.upenn.edu</a></p>
+            </div>
+        </section>
+
+        <section id="tab-news">
             <h2>News</h2>
             <div id="news-list"></div>
         </section>
-    </div>
+    </main>
 
     <footer>
-        <p>&copy; 2026 Rankin Lab, University of Pennsylvania</p>
+        <div class="footer-inner">
+            <address>
+                <p><strong>Rankin Lab</strong></p>
+                <p>Department of Physics and Astronomy, University of Pennsylvania</p>
+                <p>209 South 33rd Street, Philadelphia, PA 19104</p>
+            </address>
+            <div>
+                <p><a href="mailto:dsrankin@sas.upenn.edu">dsrankin@sas.upenn.edu</a></p>
+                <p><a href="https://www.physics.upenn.edu/" target="_blank" rel="noopener noreferrer">Penn Physics and Astronomy</a></p>
+                <p>&copy; <span id="footer-year">2026</span> Rankin Lab</p>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
