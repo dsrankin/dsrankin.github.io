@@ -43,6 +43,7 @@ window.NEWS_ITEMS = [
     date: '2024',
     tag: 'Award',
     title: 'Prof. Rankin receives a DOE Early Career Award',
+    link: 'https://science.osti.gov/-/media/early-career/pdf/All-ECRP-FY24-public-abstracts_Final.pdf',
     details: 'Searching for New Physics with Real-time Anomaly Detection'
   },
 ];
