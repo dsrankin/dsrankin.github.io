@@ -10,6 +10,14 @@ window.FEED_PAPERS = [
         "journal": ""
     },
     {
+        "title": "SpikePID: Real-Time Neuromorphic Cluster Counting in Future Drift Chambers",
+        "published": "2026-10-26",
+        "link": "https://arxiv.org/abs/2611.00104",
+        "authors": "Ho Fung Tsoi, Kam Wai Lai, Dylan Rankin",
+        "authorCount": 3,
+        "journal": ""
+    },
+    {
         "title": "Similarity Pairing with Energy Mover's Distance for Self-Supervised Pre-Training at the LHC",
         "published": "2026-09-15",
         "link": "https://arxiv.org/abs/2609.17738",
@@ -152,13 +160,5 @@ window.FEED_PAPERS = [
         "authors": "Muhammed Saleem, Alec Gunny, Chia-Jui Chou, Li-Cheng Yang, Shu-Wei Yeh, Andy H.Y. Chen, Ryan Magee, William Benoit, Tri Nguyen, Pinchen Fan, Deep Chatterjee, Ethan Marx, Eric Moreno, Rafia Omer, Ryan Raikman, Dylan Rankin, Ritwik Sharma, Michael Coughlin, Philip Harris, Erik Katsavounidis",
         "authorCount": 20,
         "journal": "Class.Quant.Grav. 41, 195024 (2024)"
-    },
-    {
-        "title": "TF07 Snowmass Report: Theory of Collider Phenomena",
-        "published": "2022-10-05",
-        "link": "https://arxiv.org/abs/2210.02591",
-        "authors": "F. Maltoni, S. Su, J. Thaler, T.K. Aarrestad, A. Aboubrahim et al.",
-        "authorCount": 346,
-        "journal": ""
     }
 ];
