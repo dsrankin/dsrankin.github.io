@@ -66,7 +66,7 @@ window.FEED_PAPERS = [
         "journal": ""
     },
     {
-        "title": "jBOT: Semantic Jet Representation Clustering Emerges from Self-Distillation",
+        "title": "jBOT: Semantic jet representation clustering emerges from self-distillation",
         "published": "2026-01-16",
         "link": "https://arxiv.org/abs/2601.11719",
         "authors": "Ho Fung Tsoi, Dylan Rankin",
