@@ -72,6 +72,7 @@
 
         /* Header and navigation */
         header {
+            position: relative;
             color: #fff;
             padding: 56px 24px 48px;
             text-align: center;
@@ -85,6 +86,22 @@
             font-weight: 700;
             letter-spacing: -0.02em;
         }
+        .header-logo {
+            position: absolute;
+            top: 50%;
+            /* Line up with the left edge of the 1040px content column on wide screens. */
+            left: max(24px, calc((100% - 1040px) / 2));
+            width: 156px;
+            height: 156px;
+            transform: translateY(-50%);
+            image-rendering: pixelated;
+            /* Fade the ragged rim (stray light pixels sit at 90-94% of the radius) into the header. */
+            -webkit-mask-image: radial-gradient(circle closest-side, #000 79%, transparent 97%);
+            mask-image: radial-gradient(circle closest-side, #000 79%, transparent 97%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .header-logo.loaded { opacity: 1; }
         header p {
             margin: 8px 0 0;
             font-size: clamp(1rem, 2.6vw, 1.2rem);
@@ -351,6 +368,7 @@
 
         @media (max-width: 720px) {
             header { padding: 36px 16px 30px; }
+            .header-logo { top: 10px; left: 10px; width: 78px; height: 78px; transform: none; }
             main { padding: 24px 16px 36px; }
             nav ul { justify-content: flex-start; }
             nav a { padding: 12px 10px 10px; }
@@ -358,6 +376,10 @@
             .pi-card .pill-links { justify-content: center; }
             .research-theme { grid-template-columns: 1fr; }
             .news-thumb-placeholder { aspect-ratio: 4 / 1; }
+        }
+        @media (max-width: 400px) {
+            /* Keep the logo clear of the centered title on the narrowest phones. */
+            .header-logo { top: 8px; left: 8px; width: 60px; height: 60px; }
         }
     </style>
     <script>
@@ -695,6 +717,29 @@
 </head>
 <body>
     <header>
+        <img class="header-logo" id="header-logo" alt="" width="156" height="156">
+        <script>
+            // The animation grows from a seed, so preload it fully and only then show it,
+            // starting from the first frame. Reduced-motion or data-saver visitors get the still.
+            (function () {
+                const logo = document.getElementById('header-logo');
+                const still = 'images/logo/nca.png';
+                const show = src => {
+                    logo.onload = () => logo.classList.add('loaded');
+                    logo.src = src;
+                };
+                const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    || (navigator.connection && navigator.connection.saveData);
+                if (reduce) {
+                    show(still);
+                    return;
+                }
+                const anim = new Image();
+                anim.onload = () => show(anim.src);
+                anim.onerror = () => show(still);
+                anim.src = 'images/logo/nca.webp';
+            })();
+        </script>
         <h1>Rankin Lab</h1>
         <p>University of Pennsylvania · Department of Physics and Astronomy</p>
     </header>
